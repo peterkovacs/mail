@@ -22,11 +22,48 @@ module Mail
         return cached
       end
 
+      i0 = index
       if has_terminal?('\G[a-zA-Z]', true, index)
-        r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        r1 = true
         @index += 1
       else
-        r0 = nil
+        r1 = nil
+      end
+      if r1
+        r0 = r1
+      else
+        if has_terminal?('\G[\\xc0-\\xd6]', true, index)
+          r2 = true
+          @index += 1
+        else
+          r2 = nil
+        end
+        if r2
+          r0 = r2
+        else
+          if has_terminal?('\G[\\xd8-\\xf6]', true, index)
+            r3 = true
+            @index += 1
+          else
+            r3 = nil
+          end
+          if r3
+            r0 = r3
+          else
+            if has_terminal?('\G[\\xf8-\\xff]', true, index)
+              r4 = true
+              @index += 1
+            else
+              r4 = nil
+            end
+            if r4
+              r0 = r4
+            else
+              @index = i0
+              r0 = nil
+            end
+          end
+        end
       end
 
       node_cache[:ALPHA][start_index] = r0
@@ -172,6 +209,460 @@ module Mail
       end
 
       node_cache[:WSP][start_index] = r0
+
+      r0
+    end
+
+    def _nt_UTF8_TAIL
+      start_index = index
+      if node_cache[:UTF8_TAIL].has_key?(index)
+        cached = node_cache[:UTF8_TAIL][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      if has_terminal?('\G[\\x80-\\xBF]', true, index)
+        r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        r0 = nil
+      end
+
+      node_cache[:UTF8_TAIL][start_index] = r0
+
+      r0
+    end
+
+    def _nt_UTF8_1
+      start_index = index
+      if node_cache[:UTF8_1].has_key?(index)
+        cached = node_cache[:UTF8_1][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      if has_terminal?('\G[\\x00-\\x7F]', true, index)
+        r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        r0 = nil
+      end
+
+      node_cache[:UTF8_1][start_index] = r0
+
+      r0
+    end
+
+    module UTF820
+      def UTF8_TAIL
+        elements[1]
+      end
+    end
+
+    def _nt_UTF8_2
+      start_index = index
+      if node_cache[:UTF8_2].has_key?(index)
+        cached = node_cache[:UTF8_2][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      i0, s0 = index, []
+      if has_terminal?('\G[\\xC2-\\xDF]', true, index)
+        r1 = true
+        @index += 1
+      else
+        r1 = nil
+      end
+      s0 << r1
+      if r1
+        r2 = _nt_UTF8_TAIL
+        s0 << r2
+      end
+      if s0.last
+        r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+        r0.extend(UTF820)
+      else
+        @index = i0
+        r0 = nil
+      end
+
+      node_cache[:UTF8_2][start_index] = r0
+
+      r0
+    end
+
+    module UTF830
+      def UTF8_TAIL
+        elements[2]
+      end
+    end
+
+    module UTF831
+      def UTF8_TAIL1
+        elements[1]
+      end
+
+      def UTF8_TAIL2
+        elements[2]
+      end
+    end
+
+    module UTF832
+      def UTF8_TAIL
+        elements[2]
+      end
+    end
+
+    module UTF833
+      def UTF8_TAIL1
+        elements[1]
+      end
+
+      def UTF8_TAIL2
+        elements[2]
+      end
+    end
+
+    def _nt_UTF8_3
+      start_index = index
+      if node_cache[:UTF8_3].has_key?(index)
+        cached = node_cache[:UTF8_3][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      i0 = index
+      i1, s1 = index, []
+      if has_terminal?("\xE0", false, index)
+        r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure("\xE0")
+        r2 = nil
+      end
+      s1 << r2
+      if r2
+        if has_terminal?('\G[\\xA0-\\xDF]', true, index)
+          r3 = true
+          @index += 1
+        else
+          r3 = nil
+        end
+        s1 << r3
+        if r3
+          r4 = _nt_UTF8_TAIL
+          s1 << r4
+        end
+      end
+      if s1.last
+        r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+        r1.extend(UTF830)
+      else
+        @index = i1
+        r1 = nil
+      end
+      if r1
+        r0 = r1
+      else
+        i5, s5 = index, []
+        if has_terminal?('\G[\\xE1-\\xEC]', true, index)
+          r6 = true
+          @index += 1
+        else
+          r6 = nil
+        end
+        s5 << r6
+        if r6
+          r7 = _nt_UTF8_TAIL
+          s5 << r7
+          if r7
+            r8 = _nt_UTF8_TAIL
+            s5 << r8
+          end
+        end
+        if s5.last
+          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+          r5.extend(UTF831)
+        else
+          @index = i5
+          r5 = nil
+        end
+        if r5
+          r0 = r5
+        else
+          i9, s9 = index, []
+          if has_terminal?("\xED", false, index)
+            r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure("\xED")
+            r10 = nil
+          end
+          s9 << r10
+          if r10
+            if has_terminal?('\G[\\x80-\\x9F]', true, index)
+              r11 = true
+              @index += 1
+            else
+              r11 = nil
+            end
+            s9 << r11
+            if r11
+              r12 = _nt_UTF8_TAIL
+              s9 << r12
+            end
+          end
+          if s9.last
+            r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
+            r9.extend(UTF832)
+          else
+            @index = i9
+            r9 = nil
+          end
+          if r9
+            r0 = r9
+          else
+            i13, s13 = index, []
+            if has_terminal?('\G[\\xEE-\\xEF]', true, index)
+              r14 = true
+              @index += 1
+            else
+              r14 = nil
+            end
+            s13 << r14
+            if r14
+              r15 = _nt_UTF8_TAIL
+              s13 << r15
+              if r15
+                r16 = _nt_UTF8_TAIL
+                s13 << r16
+              end
+            end
+            if s13.last
+              r13 = instantiate_node(SyntaxNode,input, i13...index, s13)
+              r13.extend(UTF833)
+            else
+              @index = i13
+              r13 = nil
+            end
+            if r13
+              r0 = r13
+            else
+              @index = i0
+              r0 = nil
+            end
+          end
+        end
+      end
+
+      node_cache[:UTF8_3][start_index] = r0
+
+      r0
+    end
+
+    module UTF840
+      def UTF8_TAIL1
+        elements[2]
+      end
+
+      def UTF8_TAIL2
+        elements[3]
+      end
+    end
+
+    module UTF841
+      def UTF8_TAIL1
+        elements[1]
+      end
+
+      def UTF8_TAIL2
+        elements[2]
+      end
+
+      def UTF8_TAIL3
+        elements[3]
+      end
+    end
+
+    module UTF842
+      def UTF8_TAIL1
+        elements[2]
+      end
+
+      def UTF8_TAIL2
+        elements[3]
+      end
+    end
+
+    def _nt_UTF8_4
+      start_index = index
+      if node_cache[:UTF8_4].has_key?(index)
+        cached = node_cache[:UTF8_4][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      i0 = index
+      i1, s1 = index, []
+      if has_terminal?("\xF0", false, index)
+        r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure("\xF0")
+        r2 = nil
+      end
+      s1 << r2
+      if r2
+        if has_terminal?('\G[\\x90-\\xBF]', true, index)
+          r3 = true
+          @index += 1
+        else
+          r3 = nil
+        end
+        s1 << r3
+        if r3
+          r4 = _nt_UTF8_TAIL
+          s1 << r4
+          if r4
+            r5 = _nt_UTF8_TAIL
+            s1 << r5
+          end
+        end
+      end
+      if s1.last
+        r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+        r1.extend(UTF840)
+      else
+        @index = i1
+        r1 = nil
+      end
+      if r1
+        r0 = r1
+      else
+        i6, s6 = index, []
+        if has_terminal?('\G[\\xF1-\\xF3]', true, index)
+          r7 = true
+          @index += 1
+        else
+          r7 = nil
+        end
+        s6 << r7
+        if r7
+          r8 = _nt_UTF8_TAIL
+          s6 << r8
+          if r8
+            r9 = _nt_UTF8_TAIL
+            s6 << r9
+            if r9
+              r10 = _nt_UTF8_TAIL
+              s6 << r10
+            end
+          end
+        end
+        if s6.last
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+          r6.extend(UTF841)
+        else
+          @index = i6
+          r6 = nil
+        end
+        if r6
+          r0 = r6
+        else
+          i11, s11 = index, []
+          if has_terminal?("\xF4", false, index)
+            r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure("\xF4")
+            r12 = nil
+          end
+          s11 << r12
+          if r12
+            if has_terminal?('\G[\\x80-\\xBF]', true, index)
+              r13 = true
+              @index += 1
+            else
+              r13 = nil
+            end
+            s11 << r13
+            if r13
+              r14 = _nt_UTF8_TAIL
+              s11 << r14
+              if r14
+                r15 = _nt_UTF8_TAIL
+                s11 << r15
+              end
+            end
+          end
+          if s11.last
+            r11 = instantiate_node(SyntaxNode,input, i11...index, s11)
+            r11.extend(UTF842)
+          else
+            @index = i11
+            r11 = nil
+          end
+          if r11
+            r0 = r11
+          else
+            @index = i0
+            r0 = nil
+          end
+        end
+      end
+
+      node_cache[:UTF8_4][start_index] = r0
+
+      r0
+    end
+
+    def _nt_UTF8_non_ascii
+      start_index = index
+      if node_cache[:UTF8_non_ascii].has_key?(index)
+        cached = node_cache[:UTF8_non_ascii][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      i0 = index
+      r1 = _nt_UTF8_2
+      if r1
+        r0 = r1
+      else
+        r2 = _nt_UTF8_3
+        if r2
+          r0 = r2
+        else
+          r3 = _nt_UTF8_4
+          if r3
+            r0 = r3
+          else
+            @index = i0
+            r0 = nil
+          end
+        end
+      end
+
+      node_cache[:UTF8_non_ascii][start_index] = r0
 
       r0
     end
@@ -628,8 +1119,13 @@ module Mail
             if r4
               r0 = r4
             else
-              @index = i0
-              r0 = nil
+              r5 = _nt_UTF8_non_ascii
+              if r5
+                r0 = r5
+              else
+                @index = i0
+                r0 = nil
+              end
             end
           end
         end
@@ -977,8 +1473,23 @@ module Mail
                                               if r21
                                                 r0 = r21
                                               else
-                                                @index = i0
-                                                r0 = nil
+                                                if has_terminal?('\G[\\xa0-\\xff]', true, index)
+                                                  r22 = true
+                                                  @index += 1
+                                                else
+                                                  r22 = nil
+                                                end
+                                                if r22
+                                                  r0 = r22
+                                                else
+                                                  r23 = _nt_UTF8_non_ascii
+                                                  if r23
+                                                    r0 = r23
+                                                  else
+                                                    @index = i0
+                                                    r0 = nil
+                                                  end
+                                                end
                                               end
                                             end
                                           end
@@ -1608,8 +2119,23 @@ module Mail
               if r5
                 r0 = r5
               else
-                @index = i0
-                r0 = nil
+                if has_terminal?('\G[\\x80-\\xff]', true, index)
+                  r6 = true
+                  @index += 1
+                else
+                  r6 = nil
+                end
+                if r6
+                  r0 = r6
+                else
+                  r7 = _nt_UTF8_non_ascii
+                  if r7
+                    r0 = r7
+                  else
+                    @index = i0
+                    r0 = nil
+                  end
+                end
               end
             end
           end
@@ -1957,8 +2483,23 @@ module Mail
           if r3
             r0 = r3
           else
-            @index = i0
-            r0 = nil
+            if has_terminal?('\G[\\x80-\\xff]', true, index)
+              r4 = true
+              @index += 1
+            else
+              r4 = nil
+            end
+            if r4
+              r0 = r4
+            else
+              r5 = _nt_UTF8_non_ascii
+              if r5
+                r0 = r5
+              else
+                @index = i0
+                r0 = nil
+              end
+            end
           end
         end
       end
@@ -2592,12 +3133,27 @@ module Mail
           if r3
             r0 = r3
           else
-            r4 = _nt_obs_text
+            if has_terminal?('\G[\\x80-\\xff]', true, index)
+              r4 = true
+              @index += 1
+            else
+              r4 = nil
+            end
             if r4
               r0 = r4
             else
-              @index = i0
-              r0 = nil
+              r5 = _nt_UTF8_non_ascii
+              if r5
+                r0 = r5
+              else
+                r6 = _nt_obs_text
+                if r6
+                  r0 = r6
+                else
+                  @index = i0
+                  r0 = nil
+                end
+              end
             end
           end
         end
@@ -5155,8 +5711,23 @@ module Mail
                                                 if r22
                                                   r0 = r22
                                                 else
-                                                  @index = i0
-                                                  r0 = nil
+                                                  if has_terminal?('\G[\\x80-\\xff]', true, index)
+                                                    r23 = true
+                                                    @index += 1
+                                                  else
+                                                    r23 = nil
+                                                  end
+                                                  if r23
+                                                    r0 = r23
+                                                  else
+                                                    r24 = _nt_UTF8_non_ascii
+                                                    if r24
+                                                      r0 = r24
+                                                    else
+                                                      @index = i0
+                                                      r0 = nil
+                                                    end
+                                                  end
                                                 end
                                               end
                                             end
