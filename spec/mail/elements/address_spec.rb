@@ -616,6 +616,19 @@ describe Mail::Address do
                                          :raw          => "local.@example.com"})
       end
 
+      it "should handle |First Last <local>|" do
+	address = Mail::Address.new( "First Last <local>" )
+        address.should break_down_to({
+                                         :name         => "First Last",
+                                         :display_name => "First Last",
+                                         :address      => "local",
+                                         :comments     => nil,
+                                         :domain       => nil,
+                                         :local        => "local",
+                                         :format       => "First Last <local>",
+                                         :raw          => "First Last <local>"})
+      end
+
     end
 
   end

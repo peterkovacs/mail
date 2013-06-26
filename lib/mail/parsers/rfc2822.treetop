@@ -142,7 +142,7 @@ module Mail
     end
     
     rule local_dot_atom_text
-      ("."* dot_atom_text)+
+      ("."* domain_text)+ "."*
     end
     
     rule domain_text

@@ -294,6 +294,8 @@ module Mail
         tree.local_dot_atom_text.text_value
       when tree.respond_to?(:angle_addr) && tree.angle_addr.respond_to?(:addr_spec) && tree.angle_addr.addr_spec.respond_to?(:local_part)
         tree.angle_addr.addr_spec.local_part.text_value
+      when tree.respond_to?(:angle_addr) && tree.angle_addr.respond_to?(:addr_spec) && tree.angle_addr.addr_spec.respond_to?(:local_dot_atom_text)
+        tree.angle_addr.addr_spec.local_dot_atom_text.text_value
       when tree.respond_to?(:addr_spec) && tree.addr_spec.respond_to?(:local_part)
         tree.addr_spec.local_part.text_value
       else
