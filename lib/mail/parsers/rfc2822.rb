@@ -1829,7 +1829,7 @@ module Mail
     end
 
     module LocalDotAtomText0
-      def domain_text
+      def dot_atom_text
         elements[1]
       end
     end
@@ -1866,7 +1866,7 @@ module Mail
         r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
         s1 << r2
         if r2
-          r4 = _nt_domain_text
+          r4 = _nt_dot_atom_text
           s1 << r4
         end
         if s1.last
@@ -3365,7 +3365,7 @@ module Mail
   
       def comments
         comments = []
-        dig_comments(comments, elements)
+        dig_comments(comments, elements) unless nil?
         comments
       end
     end
@@ -3383,7 +3383,7 @@ module Mail
 
       def comments
         comments = []
-        dig_comments(comments, elements)
+        dig_comments(comments, elements) unless nil?
         comments
       end
     end

@@ -142,7 +142,7 @@ module Mail
     end
     
     rule local_dot_atom_text
-      ("."* domain_text)+
+      ("."* dot_atom_text)+
     end
     
     rule domain_text
@@ -277,7 +277,7 @@ module Mail
     
         def comments
           comments = []
-          dig_comments(comments, elements)
+          dig_comments(comments, elements) unless nil?
           comments
         end
 
@@ -295,7 +295,7 @@ module Mail
 
       def comments
         comments = []
-        dig_comments(comments, elements)
+        dig_comments(comments, elements) unless nil?
         comments
       end
 

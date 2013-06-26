@@ -37,6 +37,14 @@ describe Mail::Address do
       end
     end
 
+    it "should allow us to instantiate an empty address object and call name" do
+      # strangely this only fails if a address is successfully parsed first.
+      Mail::Address.new( "foo@bar.com") rescue nil
+      [nil, '', ' '].each do |input|
+        Mail::Address.new(input).name.should == nil
+      end
+    end
+
     ['"-Earnings...Notification-" <vodacom.co.rs>', '<56253817>'].each do |spammy_address|
       it "should allow for funky spammy address #{spammy_address}" do
         Mail::Address.new(spammy_address).address.should == nil
@@ -593,6 +601,19 @@ describe Mail::Address do
                                          :local        => local_part,
                                          :format       => email_address,
                                          :raw          => email_address})
+      end
+
+      it "should handle |local.@example.com|" do
+        address = Mail::Address.new("local.@example.com")
+        address.should break_down_to({
+                                         :name         => nil,
+                                         :display_name => nil,
+                                         :address      => "local.@example.com",
+                                         :comments     => nil,
+                                         :domain       => 'example.com',
+                                         :local        => "local.",
+                                         :format       => "local.@example.com",
+                                         :raw          => "local.@example.com"})
       end
 
     end
