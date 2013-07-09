@@ -5076,16 +5076,22 @@ module Mail
     end
 
     module MessageIds0
-      def CFWS
+      def CFWS1
         elements[0]
       end
 
+      def CFWS2
+        elements[2]
+      end
+    end
+
+    module MessageIds1
       def msg_id_value
         elements[1]
       end
     end
 
-    module MessageIds1
+    module MessageIds2
       def first_msg_id
         elements[1]
       end
@@ -5121,15 +5127,50 @@ module Mail
           s4, i4 = [], index
           loop do
             i5, s5 = index, []
-            r6 = _nt_CFWS
+            i6 = index
+            i7, s7 = index, []
+            r8 = _nt_CFWS
+            s7 << r8
+            if r8
+              if has_terminal?(",", false, index)
+                r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                @index += 1
+              else
+                terminal_parse_failure(",")
+                r9 = nil
+              end
+              s7 << r9
+              if r9
+                r10 = _nt_CFWS
+                s7 << r10
+              end
+            end
+            if s7.last
+              r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+              r7.extend(MessageIds0)
+            else
+              @index = i7
+              r7 = nil
+            end
+            if r7
+              r6 = r7
+            else
+              r11 = _nt_CFWS
+              if r11
+                r6 = r11
+              else
+                @index = i6
+                r6 = nil
+              end
+            end
             s5 << r6
             if r6
-              r7 = _nt_msg_id
-              s5 << r7
+              r12 = _nt_msg_id
+              s5 << r12
             end
             if s5.last
               r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
-              r5.extend(MessageIds0)
+              r5.extend(MessageIds1)
             else
               @index = i5
               r5 = nil
@@ -5146,7 +5187,7 @@ module Mail
       end
       if s0.last
         r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-        r0.extend(MessageIds1)
+        r0.extend(MessageIds2)
       else
         @index = i0
         r0 = nil
