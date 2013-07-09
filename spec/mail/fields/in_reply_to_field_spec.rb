@@ -20,14 +20,14 @@ describe Mail::InReplyToField do
       t = Mail::InReplyToField.new('In-Reply-To: <1234@test.lindsaar.net>')
       t.name.should == 'In-Reply-To'
       t.value.should == '<1234@test.lindsaar.net>'
-      t.message_id.should == '1234@test.lindsaar.net'
+      t.message_id.should == '<1234@test.lindsaar.net>'
     end
 
     it "should accept a string without the field name" do
       t = Mail::InReplyToField.new('<1234@test.lindsaar.net>')
       t.name.should == 'In-Reply-To'
       t.value.should == '<1234@test.lindsaar.net>'
-      t.message_id.should == '1234@test.lindsaar.net'
+      t.message_id.should == '<1234@test.lindsaar.net>'
     end
     
     it "should provide encoded" do
@@ -62,7 +62,7 @@ describe Mail::InReplyToField do
     it "should handle many message IDs" do
       t = Mail::InReplyToField.new('<1234@test.lindsaar.net> <4567@test.lindsaar.net>')
       t.name.should == 'In-Reply-To'
-      t.message_ids.should == ['1234@test.lindsaar.net', '4567@test.lindsaar.net']
+      t.message_ids.should == ['<1234@test.lindsaar.net>', '<4567@test.lindsaar.net>']
     end
   end
 end

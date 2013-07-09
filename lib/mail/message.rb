@@ -109,6 +109,9 @@ module Mail
       @charset = 'UTF-8'
       @defaulted_charset = true
 
+      @smtp_envelope_from = nil
+      @smtp_envelope_to = nil
+
       @perform_deliveries = true
       @raise_delivery_errors = true
 
@@ -258,16 +261,15 @@ module Mail
     def reply(*args, &block)
       self.class.new.tap do |reply|
         if message_id
-          bracketed_message_id = "<#{message_id}>"
-          reply.in_reply_to = bracketed_message_id
+          reply.in_reply_to = message_id
           if !references.nil?
-            refs = [references].flatten.map { |r| "<#{r}>" }
-            refs << bracketed_message_id
+            refs = [references].flatten
+            refs << message_id
             reply.references = refs.join(' ')
           elsif !in_reply_to.nil? && !in_reply_to.kind_of?(Array)
-            reply.references = "<#{in_reply_to}> #{bracketed_message_id}"
+            reply.references = "#{in_reply_to} #{message_id}"
           end
-          reply.references ||= bracketed_message_id
+          reply.references ||= message_id
         end
         if subject
           reply.subject = subject =~ /^Re:/i ? subject : "RE: #{subject}"
@@ -355,8 +357,7 @@ module Mail
         self_message_id, other_message_id = self.message_id, other.message_id
         self.message_id, other.message_id = '<temp@test>', '<temp@test>'
         result = self.encoded == other.encoded
-        self.message_id = "<#{self_message_id}>" if self_message_id
-        other.message_id = "<#{other_message_id}>" if other_message_id
+        self.message_id, other.message_id = self_message_id, other_message_id
         result
       end
     end
@@ -1022,6 +1023,84 @@ module Mail
     def sender=( val )
       header[:sender] = val
     end
+
+    # Returns the SMTP Envelope From value of the mail object, as a single
+    # string of an address spec.
+    #
+    # Defaults to Return-Path, Sender, or the first From address.
+    #
+    # Example:
+    #
+    #  mail.smtp_envelope_from = 'Mikel <mikel@test.lindsaar.net>'
+    #  mail.smtp_envelope_from #=> 'mikel@test.lindsaar.net'
+    #
+    # Also allows you to set the value by passing a value as a parameter
+    #
+    # Example:
+    #
+    #  mail.smtp_envelope_from 'Mikel <mikel@test.lindsaar.net>'
+    #  mail.smtp_envelope_from #=> 'mikel@test.lindsaar.net'
+    def smtp_envelope_from( val = nil )
+      if val
+        self.smtp_envelope_from = val
+      else
+        @smtp_envelope_from || return_path || sender || from_addrs.first
+      end
+    end
+
+    # Sets the From address on the SMTP Envelope.
+    #
+    # Example:
+    #
+    #  mail.smtp_envelope_from = 'Mikel <mikel@test.lindsaar.net>'
+    #  mail.smtp_envelope_from #=> 'mikel@test.lindsaar.net'
+    def smtp_envelope_from=( val )
+      @smtp_envelope_from = val
+    end
+
+    # Returns the SMTP Envelope To value of the mail object.
+    #
+    # Defaults to #destinations: To, Cc, and Bcc addresses.
+    #
+    # Example:
+    #
+    #  mail.smtp_envelope_to = 'Mikel <mikel@test.lindsaar.net>'
+    #  mail.smtp_envelope_to #=> 'mikel@test.lindsaar.net'
+    #
+    # Also allows you to set the value by passing a value as a parameter
+    #
+    # Example:
+    #
+    #  mail.smtp_envelope_to ['Mikel <mikel@test.lindsaar.net>', 'Lindsaar <lindsaar@test.lindsaar.net>']
+    #  mail.smtp_envelope_to #=> ['mikel@test.lindsaar.net', 'lindsaar@test.lindsaar.net']
+    def smtp_envelope_to( val = nil )
+      if val
+        self.smtp_envelope_to = val
+      else
+        @smtp_envelope_to || destinations
+      end
+    end
+
+    # Sets the To addresses on the SMTP Envelope.
+    #
+    # Example:
+    #
+    #  mail.smtp_envelope_to = 'Mikel <mikel@test.lindsaar.net>'
+    #  mail.smtp_envelope_to #=> 'mikel@test.lindsaar.net'
+    #
+    #  mail.smtp_envelope_to = ['Mikel <mikel@test.lindsaar.net>', 'Lindsaar <lindsaar@test.lindsaar.net>']
+    #  mail.smtp_envelope_to #=> ['mikel@test.lindsaar.net', 'lindsaar@test.lindsaar.net']
+    def smtp_envelope_to=( val )
+      @smtp_envelope_to =
+        case val
+        when Array, NilClass
+          val
+        else
+          [val]
+        end
+    end
+
+
 
     # Returns the decoded value of the subject field, as a single string.
     #

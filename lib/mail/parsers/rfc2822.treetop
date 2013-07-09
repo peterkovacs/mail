@@ -394,15 +394,15 @@ module Mail
     end
 
     rule message_ids
-      first_msg_id:msg_id other_msg_ids:( CFWS msg_id_value:msg_id )*
+      (CFWS)? first_msg_id:msg_id other_msg_ids:( CFWS msg_id_value:msg_id )*
     end
     
     rule msg_id
-      (CFWS)? "<" msg_id_value ">" (CFWS)?
+      "<" msg_id_value ">" 
     end
     
     rule msg_id_value
-      id_left "@" id_right
+      id_left "@" id_right / id_left
     end
     
     rule id_left

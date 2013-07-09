@@ -64,14 +64,14 @@ describe Mail::MessageIdField do
       m = Mail::MessageIdField.new('Message-ID: <1234@test.lindsaar.net>')
       m.name.should == 'Message-ID'
       m.value.should == '<1234@test.lindsaar.net>'
-      m.message_id.should == '1234@test.lindsaar.net'
+      m.message_id.should == '<1234@test.lindsaar.net>'
     end
 
     it "should accept a string without the field name" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
       m.name.should == 'Message-ID'
       m.value.should == '<1234@test.lindsaar.net>'
-      m.message_id.should == '1234@test.lindsaar.net'
+      m.message_id.should == '<1234@test.lindsaar.net>'
     end
 
     it "should accept a nil value and generate a message_id" do
@@ -88,8 +88,8 @@ describe Mail::MessageIdField do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net> <4567@test.lindsaar.net>')
       m.name.should == 'Message-ID'
       m.to_s.should == '<1234@test.lindsaar.net>'
-      m.message_id.should == '1234@test.lindsaar.net'
-      m.message_ids.should == ['1234@test.lindsaar.net']
+      m.message_id.should == '<1234@test.lindsaar.net>'
+      m.message_ids.should == ['<1234@test.lindsaar.net>']
     end
 
     it "should change the message id if given a new message id" do
@@ -105,7 +105,7 @@ describe Mail::MessageIdField do
     it "should provide to_s" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
       m.to_s.should == '<1234@test.lindsaar.net>'
-      m.message_id.to_s.should == '1234@test.lindsaar.net'
+      m.message_id.to_s.should == '<1234@test.lindsaar.net>'
     end
 
     it "should provide encoded" do
@@ -141,7 +141,7 @@ describe Mail::MessageIdField do
   describe "weird message IDs" do
     it "should be able to parse <000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>" do
       m = Mail::MessageIdField.new('<000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>')
-      m.message_id.should == '000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com'
+      m.message_id.should == '<000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>'
     end
   end
 end

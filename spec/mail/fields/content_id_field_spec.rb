@@ -37,14 +37,14 @@ describe Mail::ContentIdField do
       c = Mail::ContentIdField.new('Content-ID: <1234@test.lindsaar.net>')
       c.name.should == 'Content-ID'
       c.value.should == '<1234@test.lindsaar.net>'
-      c.content_id.should == '1234@test.lindsaar.net'
+      c.content_id.should == '<1234@test.lindsaar.net>'
     end
 
     it "should accept a string without the field name" do
       m = Mail::ContentIdField.new('<1234@test.lindsaar.net>')
       m.name.should == 'Content-ID'
       m.value.should == '<1234@test.lindsaar.net>'
-      m.content_id.should == '1234@test.lindsaar.net'
+      m.content_id.should == '<1234@test.lindsaar.net>'
     end
 
     it "should accept a nil value and generate a content_id" do
@@ -71,7 +71,7 @@ describe Mail::ContentIdField do
       m = Mail::ContentIdField.new('<1234@test.lindsaar.net> <4567@test.lindsaar.net>')
       m.name.should == 'Content-ID'
       m.to_s.should == '<1234@test.lindsaar.net>'
-      m.content_id.should == '1234@test.lindsaar.net'
+      m.content_id.should == '<1234@test.lindsaar.net>'
     end
 
     it "should change the message id if given a new message id" do
@@ -87,7 +87,7 @@ describe Mail::ContentIdField do
     it "should provide to_s" do
       m = Mail::ContentIdField.new('<1234@test.lindsaar.net>')
       m.to_s.should == '<1234@test.lindsaar.net>'
-      m.content_id.to_s.should == '1234@test.lindsaar.net'
+      m.content_id.to_s.should == '<1234@test.lindsaar.net>'
     end
 
     it "should provide encoded" do

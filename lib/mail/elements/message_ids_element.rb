@@ -7,7 +7,7 @@ module Mail
     def initialize(string)
       parser = Mail::MessageIdsParser.new
       if tree = parser.parse(string)
-        @message_ids = tree.message_ids.map { |msg_id| clean_msg_id(msg_id.text_value) }
+        @message_ids = tree.message_ids.map { |msg_id| msg_id.text_value }
       else
         raise Mail::Field::ParseError, "MessageIdsElement can not parse |#{string}|\nReason was: #{parser.failure_reason}\n"
       end
@@ -21,9 +21,5 @@ module Mail
       @message_ids.first
     end
     
-    def clean_msg_id( val )
-      val =~ /.*<(.*)>.*/ ; $1
-    end
-
   end
 end

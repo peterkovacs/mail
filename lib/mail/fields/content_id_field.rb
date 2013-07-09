@@ -40,7 +40,7 @@ module Mail
     end
     
     def to_s
-      "<#{content_id}>"
+      content_id
     end
     
     # TODO: Fix this up
