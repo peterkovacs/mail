@@ -4,7 +4,7 @@ module Mail
     include RFC2822
 
     rule primary
-      name_val_list ";" date_time
+      name_val_list ( ";" date_time (CFWS name_val_list)? )? 
     end
     
   end

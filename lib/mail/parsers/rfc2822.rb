@@ -1545,8 +1545,41 @@ module Mail
           if r3
             r1 = r3
           else
-            @index = i1
-            r1 = nil
+            if has_terminal?(",", false, index)
+              r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure(",")
+              r4 = nil
+            end
+            if r4
+              r1 = r4
+            else
+              if has_terminal?(" ", false, index)
+                r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                @index += 1
+              else
+                terminal_parse_failure(" ")
+                r5 = nil
+              end
+              if r5
+                r1 = r5
+              else
+                if has_terminal?(":", false, index)
+                  r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                  @index += 1
+                else
+                  terminal_parse_failure(":")
+                  r6 = nil
+                end
+                if r6
+                  r1 = r6
+                else
+                  @index = i1
+                  r1 = nil
+                end
+              end
+            end
           end
         end
         if r1
@@ -1681,6 +1714,58 @@ module Mail
       r0
     end
 
+    module DotAtomNoSpace0
+      def dot_atom_text_no_space
+        elements[1]
+      end
+
+    end
+
+    def _nt_dot_atom_no_space
+      start_index = index
+      if node_cache[:dot_atom_no_space].has_key?(index)
+        cached = node_cache[:dot_atom_no_space][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      i0, s0 = index, []
+      r2 = _nt_CFWS
+      if r2
+        r1 = r2
+      else
+        r1 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s0 << r1
+      if r1
+        r3 = _nt_dot_atom_text_no_space
+        s0 << r3
+        if r3
+          r5 = _nt_CFWS
+          if r5
+            r4 = r5
+          else
+            r4 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s0 << r4
+        end
+      end
+      if s0.last
+        r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+        r0.extend(DotAtomNoSpace0)
+      else
+        @index = i0
+        r0 = nil
+      end
+
+      node_cache[:dot_atom_no_space][start_index] = r0
+
+      r0
+    end
+
     module LocalDotAtom0
       def local_dot_atom_text
         elements[1]
@@ -1789,19 +1874,37 @@ module Mail
         r2 = _nt_domain_text
         s1 << r2
         if r2
-          if has_terminal?(".", false, index)
-            r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
-          else
-            terminal_parse_failure(".")
-            r4 = nil
-          end
+          r4 = _nt_CFWS
           if r4
             r3 = r4
           else
             r3 = instantiate_node(SyntaxNode,input, index...index)
           end
           s1 << r3
+          if r3
+            if has_terminal?(".", false, index)
+              r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure(".")
+              r6 = nil
+            end
+            if r6
+              r5 = r6
+            else
+              r5 = instantiate_node(SyntaxNode,input, index...index)
+            end
+            s1 << r5
+            if r5
+              r8 = _nt_CFWS
+              if r8
+                r7 = r8
+              else
+                r7 = instantiate_node(SyntaxNode,input, index...index)
+              end
+              s1 << r7
+            end
+          end
         end
         if s1.last
           r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
@@ -1824,6 +1927,69 @@ module Mail
       end
 
       node_cache[:dot_atom_text][start_index] = r0
+
+      r0
+    end
+
+    module DotAtomTextNoSpace0
+      def domain_text
+        elements[0]
+      end
+
+    end
+
+    def _nt_dot_atom_text_no_space
+      start_index = index
+      if node_cache[:dot_atom_text_no_space].has_key?(index)
+        cached = node_cache[:dot_atom_text_no_space][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      s0, i0 = [], index
+      loop do
+        i1, s1 = index, []
+        r2 = _nt_domain_text
+        s1 << r2
+        if r2
+          if has_terminal?(".", false, index)
+            r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure(".")
+            r4 = nil
+          end
+          if r4
+            r3 = r4
+          else
+            r3 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s1 << r3
+        end
+        if s1.last
+          r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+          r1.extend(DotAtomTextNoSpace0)
+        else
+          @index = i1
+          r1 = nil
+        end
+        if r1
+          s0 << r1
+        else
+          break
+        end
+      end
+      if s0.empty?
+        @index = i0
+        r0 = nil
+      else
+        r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      end
+
+      node_cache[:dot_atom_text_no_space][start_index] = r0
 
       r0
     end
@@ -2687,6 +2853,69 @@ module Mail
       r0
     end
 
+    module AddrSpecNoSpace0
+      def local_part
+        elements[0]
+      end
+
+      def domain
+        elements[2]
+      end
+    end
+
+    def _nt_addr_spec_no_space
+      start_index = index
+      if node_cache[:addr_spec_no_space].has_key?(index)
+        cached = node_cache[:addr_spec_no_space][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      i0 = index
+      i1, s1 = index, []
+      r2 = _nt_local_part
+      s1 << r2
+      if r2
+        if has_terminal?("@", false, index)
+          r3 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure("@")
+          r3 = nil
+        end
+        s1 << r3
+        if r3
+          r4 = _nt_domain_no_space
+          s1 << r4
+        end
+      end
+      if s1.last
+        r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+        r1.extend(AddrSpecNoSpace0)
+      else
+        @index = i1
+        r1 = nil
+      end
+      if r1
+        r0 = r1
+      else
+        r5 = _nt_local_part
+        if r5
+          r0 = r5
+        else
+          @index = i0
+          r0 = nil
+        end
+      end
+
+      node_cache[:addr_spec_no_space][start_index] = r0
+
+      r0
+    end
+
     def _nt_local_part
       start_index = index
       if node_cache[:local_part].has_key?(index)
@@ -2753,6 +2982,41 @@ module Mail
       end
 
       node_cache[:domain][start_index] = r0
+
+      r0
+    end
+
+    def _nt_domain_no_space
+      start_index = index
+      if node_cache[:domain_no_space].has_key?(index)
+        cached = node_cache[:domain_no_space][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      i0 = index
+      r1 = _nt_dot_atom_no_space
+      if r1
+        r0 = r1
+      else
+        r2 = _nt_domain_literal
+        if r2
+          r0 = r2
+        else
+          r3 = _nt_obs_domain
+          if r3
+            r0 = r3
+          else
+            @index = i0
+            r0 = nil
+          end
+        end
+      end
+
+      node_cache[:domain_no_space][start_index] = r0
 
       r0
     end
@@ -3223,6 +3487,16 @@ module Mail
       end
     end
 
+    module NameAddr1
+      def display_name
+        elements[0]
+      end
+
+      def angle_addr
+        elements[1]
+      end
+    end
+
     def _nt_name_addr
       start_index = index
       if node_cache[:name_addr].has_key?(index)
@@ -3252,12 +3526,30 @@ module Mail
       if r1
         r0 = r1
       else
-        r4 = _nt_angle_addr
+        i4, s4 = index, []
+        r5 = _nt_angle_addr
+        s4 << r5
+        if r5
+          r6 = _nt_angle_addr
+          s4 << r6
+        end
+        if s4.last
+          r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+          r4.extend(NameAddr1)
+        else
+          @index = i4
+          r4 = nil
+        end
         if r4
           r0 = r4
         else
-          @index = i0
-          r0 = nil
+          r7 = _nt_angle_addr
+          if r7
+            r0 = r7
+          else
+            @index = i0
+            r0 = nil
+          end
         end
       end
 
@@ -3353,6 +3645,16 @@ module Mail
       r0
     end
 
+    module Mailbox0
+      def display_name
+        elements[0]
+      end
+
+      def angle_addr
+        elements[1]
+      end
+    end
+
     def _nt_mailbox
       start_index = index
       if node_cache[:mailbox].has_key?(index)
@@ -3369,12 +3671,30 @@ module Mail
       if r1
         r0 = r1
       else
-        r2 = _nt_addr_spec
+        i2, s2 = index, []
+        r3 = _nt_addr_spec
+        s2 << r3
+        if r3
+          r4 = _nt_angle_addr
+          s2 << r4
+        end
+        if s2.last
+          r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+          r2.extend(Mailbox0)
+        else
+          @index = i2
+          r2 = nil
+        end
         if r2
           r0 = r2
         else
-          @index = i0
-          r0 = nil
+          r5 = _nt_addr_spec
+          if r5
+            r0 = r5
+          else
+            @index = i0
+            r0 = nil
+          end
         end
       end
 
@@ -4509,9 +4829,6 @@ module Mail
         elements[3]
       end
 
-      def DIGIT4
-        elements[4]
-      end
     end
 
     def _nt_zone
@@ -4563,7 +4880,12 @@ module Mail
             r7 = _nt_DIGIT
             s1 << r7
             if r7
-              r8 = _nt_DIGIT
+              r9 = _nt_DIGIT
+              if r9
+                r8 = r9
+              else
+                r8 = instantiate_node(SyntaxNode,input, index...index)
+              end
               s1 << r8
             end
           end
@@ -4579,9 +4901,9 @@ module Mail
       if r1
         r0 = r1
       else
-        r9 = _nt_obs_zone
-        if r9
-          r0 = r9
+        r10 = _nt_obs_zone
+        if r10
+          r0 = r10
         else
           @index = i0
           r0 = nil
@@ -4732,16 +5054,29 @@ module Mail
     end
 
     module Received0
+      def CFWS
+        elements[0]
+      end
+
+      def name_val_list
+        elements[1]
+      end
+    end
+
+    module Received1
+      def date_time
+        elements[1]
+      end
+
+    end
+
+    module Received2
       def name_val_list
         elements[0]
       end
 
-      def date_time
-        elements[2]
-      end
-
       def CRLF
-        elements[3]
+        elements[2]
       end
     end
 
@@ -4760,26 +5095,62 @@ module Mail
       r1 = _nt_name_val_list
       s0 << r1
       if r1
+        i3, s3 = index, []
         if has_terminal?(";", false, index)
-          r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
           @index += 1
         else
           terminal_parse_failure(";")
-          r2 = nil
+          r4 = nil
+        end
+        s3 << r4
+        if r4
+          r5 = _nt_date_time
+          s3 << r5
+          if r5
+            i7, s7 = index, []
+            r8 = _nt_CFWS
+            s7 << r8
+            if r8
+              r9 = _nt_name_val_list
+              s7 << r9
+            end
+            if s7.last
+              r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+              r7.extend(Received0)
+            else
+              @index = i7
+              r7 = nil
+            end
+            if r7
+              r6 = r7
+            else
+              r6 = instantiate_node(SyntaxNode,input, index...index)
+            end
+            s3 << r6
+          end
+        end
+        if s3.last
+          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+          r3.extend(Received1)
+        else
+          @index = i3
+          r3 = nil
+        end
+        if r3
+          r2 = r3
+        else
+          r2 = instantiate_node(SyntaxNode,input, index...index)
         end
         s0 << r2
         if r2
-          r3 = _nt_date_time
-          s0 << r3
-          if r3
-            r4 = _nt_CRLF
-            s0 << r4
-          end
+          r10 = _nt_CRLF
+          s0 << r10
         end
       end
       if s0.last
         r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-        r0.extend(Received0)
+        r0.extend(Received2)
       else
         @index = i0
         r0 = nil
@@ -4830,41 +5201,46 @@ module Mail
       end
       s0 << r1
       if r1
-        i3, s3 = index, []
-        r4 = _nt_name_val_pair
-        s3 << r4
-        if r4
-          s5, i5 = [], index
+        i4, s4 = index, []
+        r5 = _nt_name_val_pair
+        s4 << r5
+        if r5
+          s6, i6 = [], index
           loop do
-            i6, s6 = index, []
-            r7 = _nt_CFWS
-            s6 << r7
-            if r7
-              r8 = _nt_name_val_pair
-              s6 << r8
+            i7, s7 = index, []
+            r8 = _nt_CFWS
+            s7 << r8
+            if r8
+              r9 = _nt_name_val_pair
+              s7 << r9
             end
-            if s6.last
-              r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
-              r6.extend(NameValList0)
+            if s7.last
+              r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+              r7.extend(NameValList0)
             else
-              @index = i6
-              r6 = nil
+              @index = i7
+              r7 = nil
             end
-            if r6
-              s5 << r6
+            if r7
+              s6 << r7
             else
               break
             end
           end
-          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
-          s3 << r5
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+          s4 << r6
         end
-        if s3.last
-          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-          r3.extend(NameValList1)
+        if s4.last
+          r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+          r4.extend(NameValList1)
         else
-          @index = i3
-          r3 = nil
+          @index = i4
+          r4 = nil
+        end
+        if r4
+          r3 = r4
+        else
+          r3 = instantiate_node(SyntaxNode,input, index...index)
         end
         s0 << r3
       end
@@ -4881,6 +5257,30 @@ module Mail
       r0
     end
 
+    def _nt_name_val_separator
+      start_index = index
+      if node_cache[:name_val_separator].has_key?(index)
+        cached = node_cache[:name_val_separator][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      if has_terminal?(",", false, index)
+        r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure(",")
+        r0 = nil
+      end
+
+      node_cache[:name_val_separator][start_index] = r0
+
+      r0
+    end
+
     module NameValPair0
       def item_name
         elements[0]
@@ -4890,9 +5290,6 @@ module Mail
         elements[1]
       end
 
-      def item_value
-        elements[2]
-      end
     end
 
     def _nt_name_val_pair
@@ -4913,8 +5310,31 @@ module Mail
         r2 = _nt_CFWS
         s0 << r2
         if r2
-          r3 = _nt_item_value
+          s3, i3 = [], index
+          loop do
+            r4 = _nt_item_value
+            if r4
+              s3 << r4
+            else
+              break
+            end
+          end
+          if s3.empty?
+            @index = i3
+            r3 = nil
+          else
+            r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+          end
           s0 << r3
+          if r3
+            r6 = _nt_name_val_separator
+            if r6
+              r5 = r6
+            else
+              r5 = instantiate_node(SyntaxNode,input, index...index)
+            end
+            s0 << r5
+          end
         end
       end
       if s0.last
@@ -5016,6 +5436,86 @@ module Mail
       r0
     end
 
+    module ItemValueAtom0
+    end
+
+    def _nt_item_value_atom
+      start_index = index
+      if node_cache[:item_value_atom].has_key?(index)
+        cached = node_cache[:item_value_atom][index]
+        if cached
+          cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+          @index = cached.interval.end
+        end
+        return cached
+      end
+
+      i0, s0 = index, []
+      r2 = _nt_CFWS
+      if r2
+        r1 = r2
+      else
+        r1 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s0 << r1
+      if r1
+        s3, i3 = [], index
+        loop do
+          i4 = index
+          r5 = _nt_atext
+          if r5
+            r4 = r5
+          else
+            if has_terminal?(",", false, index)
+              r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure(",")
+              r6 = nil
+            end
+            if r6
+              r4 = r6
+            else
+              @index = i4
+              r4 = nil
+            end
+          end
+          if r4
+            s3 << r4
+          else
+            break
+          end
+        end
+        if s3.empty?
+          @index = i3
+          r3 = nil
+        else
+          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+        end
+        s0 << r3
+        if r3
+          r8 = _nt_CFWS
+          if r8
+            r7 = r8
+          else
+            r7 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s0 << r7
+        end
+      end
+      if s0.last
+        r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+        r0.extend(ItemValueAtom0)
+      else
+        @index = i0
+        r0 = nil
+      end
+
+      node_cache[:item_value_atom][start_index] = r0
+
+      r0
+    end
+
     def _nt_item_value
       start_index = index
       if node_cache[:item_value].has_key?(index)
@@ -5050,7 +5550,7 @@ module Mail
         if r3
           r0 = r3
         else
-          r4 = _nt_atom
+          r4 = _nt_item_value_atom
           if r4
             r0 = r4
           else
@@ -5200,7 +5700,7 @@ module Mail
 
     module MsgId0
       def msg_id_value
-        elements[1]
+        elements[2]
       end
 
     end
@@ -5216,35 +5716,65 @@ module Mail
         return cached
       end
 
-      i0, s0 = index, []
+      i0 = index
+      i1, s1 = index, []
       if has_terminal?("<", false, index)
-        r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
         @index += 1
       else
         terminal_parse_failure("<")
-        r1 = nil
+        r2 = nil
       end
-      s0 << r1
-      if r1
-        r2 = _nt_msg_id_value
-        s0 << r2
-        if r2
-          if has_terminal?(">", false, index)
-            r3 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
-          else
-            terminal_parse_failure(">")
-            r3 = nil
+      s1 << r2
+      if r2
+        r4 = _nt_CFWS
+        if r4
+          r3 = r4
+        else
+          r3 = instantiate_node(SyntaxNode,input, index...index)
+        end
+        s1 << r3
+        if r3
+          r5 = _nt_msg_id_value
+          s1 << r5
+          if r5
+            r7 = _nt_CFWS
+            if r7
+              r6 = r7
+            else
+              r6 = instantiate_node(SyntaxNode,input, index...index)
+            end
+            s1 << r6
+            if r6
+              if has_terminal?(">", false, index)
+                r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                @index += 1
+              else
+                terminal_parse_failure(">")
+                r8 = nil
+              end
+              s1 << r8
+            end
           end
-          s0 << r3
         end
       end
-      if s0.last
-        r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-        r0.extend(MsgId0)
+      if s1.last
+        r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+        r1.extend(MsgId0)
       else
-        @index = i0
-        r0 = nil
+        @index = i1
+        r1 = nil
+      end
+      if r1
+        r0 = r1
+      else
+        r9 = _nt_msg_id_value
+        if r9
+          r0 = r9
+        else
+          @index = i0
+          r0 = nil
+        end
       end
 
       node_cache[:msg_id][start_index] = r0
@@ -5259,6 +5789,19 @@ module Mail
 
       def id_right
         elements[2]
+      end
+    end
+
+    module MsgIdValue1
+      def id_left
+        elements[0]
+      end
+
+    end
+
+    module MsgIdValue2
+      def id_right
+        elements[1]
       end
     end
 
@@ -5301,12 +5844,60 @@ module Mail
       if r1
         r0 = r1
       else
-        r5 = _nt_id_left
+        i5, s5 = index, []
+        r6 = _nt_id_left
+        s5 << r6
+        if r6
+          if has_terminal?("@", false, index)
+            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure("@")
+            r7 = nil
+          end
+          s5 << r7
+        end
+        if s5.last
+          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+          r5.extend(MsgIdValue1)
+        else
+          @index = i5
+          r5 = nil
+        end
         if r5
           r0 = r5
         else
-          @index = i0
-          r0 = nil
+          i8, s8 = index, []
+          if has_terminal?("@", false, index)
+            r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure("@")
+            r9 = nil
+          end
+          s8 << r9
+          if r9
+            r10 = _nt_id_right
+            s8 << r10
+          end
+          if s8.last
+            r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+            r8.extend(MsgIdValue2)
+          else
+            @index = i8
+            r8 = nil
+          end
+          if r8
+            r0 = r8
+          else
+            r11 = _nt_id_left
+            if r11
+              r0 = r11
+            else
+              @index = i0
+              r0 = nil
+            end
+          end
         end
       end
 
@@ -5392,6 +5983,9 @@ module Mail
 
     end
 
+    module MsgIdDotAtomText1
+    end
+
     def _nt_msg_id_dot_atom_text
       start_index = index
       if node_cache[:msg_id_dot_atom_text].has_key?(index)
@@ -5403,44 +5997,68 @@ module Mail
         return cached
       end
 
-      s0, i0 = [], index
-      loop do
-        i1, s1 = index, []
-        r2 = _nt_msg_id_domain_text
-        s1 << r2
-        if r2
-          if has_terminal?(".", false, index)
-            r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
+      i0, s0 = index, []
+      if has_terminal?(".", false, index)
+        r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure(".")
+        r2 = nil
+      end
+      if r2
+        r1 = r2
+      else
+        r1 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s0 << r1
+      if r1
+        s3, i3 = [], index
+        loop do
+          i4, s4 = index, []
+          r5 = _nt_msg_id_domain_text
+          s4 << r5
+          if r5
+            if has_terminal?(".", false, index)
+              r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure(".")
+              r7 = nil
+            end
+            if r7
+              r6 = r7
+            else
+              r6 = instantiate_node(SyntaxNode,input, index...index)
+            end
+            s4 << r6
+          end
+          if s4.last
+            r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+            r4.extend(MsgIdDotAtomText0)
           else
-            terminal_parse_failure(".")
+            @index = i4
             r4 = nil
           end
           if r4
-            r3 = r4
+            s3 << r4
           else
-            r3 = instantiate_node(SyntaxNode,input, index...index)
+            break
           end
-          s1 << r3
         end
-        if s1.last
-          r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
-          r1.extend(MsgIdDotAtomText0)
+        if s3.empty?
+          @index = i3
+          r3 = nil
         else
-          @index = i1
-          r1 = nil
+          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
         end
-        if r1
-          s0 << r1
-        else
-          break
-        end
+        s0 << r3
       end
-      if s0.empty?
+      if s0.last
+        r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+        r0.extend(MsgIdDotAtomText1)
+      else
         @index = i0
         r0 = nil
-      else
-        r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
       end
 
       node_cache[:msg_id_dot_atom_text][start_index] = r0

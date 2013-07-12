@@ -736,13 +736,10 @@ module Mail
     end
 
     module ObsHour0
-      def DIGIT1
+      def DIGIT
         elements[0]
       end
 
-      def DIGIT2
-        elements[1]
-      end
     end
 
     module ObsHour1
@@ -772,7 +769,12 @@ module Mail
         r4 = _nt_DIGIT
         s3 << r4
         if r4
-          r5 = _nt_DIGIT
+          r6 = _nt_DIGIT
+          if r6
+            r5 = r6
+          else
+            r5 = instantiate_node(SyntaxNode,input, index...index)
+          end
           s3 << r5
         end
         if s3.last
@@ -784,13 +786,13 @@ module Mail
         end
         s0 << r3
         if r3
-          r7 = _nt_CFWS
-          if r7
-            r6 = r7
+          r8 = _nt_CFWS
+          if r8
+            r7 = r8
           else
-            r6 = instantiate_node(SyntaxNode,input, index...index)
+            r7 = instantiate_node(SyntaxNode,input, index...index)
           end
-          s0 << r6
+          s0 << r7
         end
       end
       if s0.last

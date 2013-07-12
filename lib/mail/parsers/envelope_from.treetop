@@ -21,7 +21,7 @@ module Mail
     #
     #        an end-of-line marker.
     rule primary
-      addr_spec ctime_date
+      addr_spec:addr_spec_no_space ctime_date
     end
     
     rule ctime_date

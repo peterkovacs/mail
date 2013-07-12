@@ -47,5 +47,17 @@ describe Mail::ReceivedField do
     t.decoded.should == ''
     t.encoded.should == "Received: \r\n"
   end
+
+  it "should handle elements without date" do
+    t = Mail::ReceivedField.new('from smtp-in-1001.vdc.amazon.com by smtp-out-1001.amazon.com with ESMTP (peer crosscheck: smtp-in-1001.vdc.amazon.com)')
+    t.decoded.should == 'from smtp-in-1001.vdc.amazon.com by smtp-out-1001.amazon.com with ESMTP (peer crosscheck: smtp-in-1001.vdc.amazon.com)'
+    t.encoded.should == "Received: from smtp-in-1001.vdc.amazon.com by smtp-out-1001.amazon.com with ESMTP (peer crosscheck: smtp-in-1001.vdc.amazon.com)\r\n"
+  end
+
+  it "should handle elements without info" do
+    t = Mail::ReceivedField.new( '(qmail 77527 invoked by uid 89); 10 Jun 2004 12:17:55 -0000' )
+    t.decoded.should == '(qmail 77527 invoked by uid 89); Thu, 10 Jun 2004 12:17:55 +0000' 
+    t.encoded.should == "Received: (qmail 77527 invoked by uid 89); Thu, 10 Jun 2004 12:17:55 +0000\r\n"
+  end
   
 end

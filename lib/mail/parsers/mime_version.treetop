@@ -4,7 +4,7 @@ module Mail
     include RFC2822
 
     rule version
-      CFWS major_digits:DIGIT+ comment? "." comment? minor_digits:DIGIT+ CFWS {
+      CFWS major_digits:DIGIT+ comment? "." comment? minor_digits:DIGIT+ (";" atom+)? CFWS {
         def major
           major_digits
         end

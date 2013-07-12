@@ -1,10 +1,10 @@
 module Mail
-  grammar MessageIds
+  grammar InReplyTo
 
     include RFC2822
 
     rule primary
-      message_ids {
+      (CFWS)? first_msg_id:msg_id other_msg_ids:( ( ( (CFWS)? "," (CFWS)? ) / CFWS ) msg_id_value:msg_id )* ( ";" .* )? {
         def message_ids
           [first_msg_id] + other_msg_ids.elements.map { |o| o.msg_id_value }
         end

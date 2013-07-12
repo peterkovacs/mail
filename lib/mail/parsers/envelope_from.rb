@@ -33,7 +33,7 @@ module Mail
       end
 
       i0, s0 = index, []
-      r1 = _nt_addr_spec
+      r1 = _nt_addr_spec_no_space
       s0 << r1
       if r1
         r2 = _nt_ctime_date

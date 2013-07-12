@@ -30,9 +30,9 @@ require 'mail/fields/common/common_message_id'
 
 module Mail
   class InReplyToField < StructuredField
-    
+
     include Mail::CommonMessageId
-    
+
     FIELD_NAME = 'in-reply-to'
     CAPITALIZED_FIELD = 'In-Reply-To'
     
@@ -49,6 +49,18 @@ module Mail
     
     def decoded
       do_decode
+    end
+
+    def element
+      @element ||= Mail::InReplyToElement.new(value) unless value.blank?
+    end
+
+    def parse(val = value)
+      unless val.blank?
+        @element = Mail::InReplyToElement.new(val)
+      else
+        nil
+      end
     end
     
   end

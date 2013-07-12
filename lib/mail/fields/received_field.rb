@@ -44,7 +44,9 @@ module Mail
     end
     
     def date_time
-      @datetime ||= ::DateTime.parse("#{element.date_time}")
+      if element.date_time.present?
+        @datetime ||= ::DateTime.parse("#{element.date_time}")
+      end
     end
 
     def info
@@ -52,22 +54,30 @@ module Mail
     end
    
     def formatted_date
-      date_time.strftime("%a, %d %b %Y %H:%M:%S ") + date_time.zone.delete(':')
+      if date_time.present?
+        tmp_date = date_time.frozen? ? date_time.dup : date_time
+        tmp_date.strftime("%a, %d %b %Y %H:%M:%S ") + \
+        tmp_date.zone.delete(':')
+      end
     end
  
     def encoded
       if value.blank?
         "#{CAPITALIZED_FIELD}: \r\n"
+      elsif date = self.formatted_date
+        "#{CAPITALIZED_FIELD}: #{info}; #{date}\r\n"
       else
-        "#{CAPITALIZED_FIELD}: #{info}; #{formatted_date}\r\n"
+        "#{CAPITALIZED_FIELD}: #{info}\r\n"
       end
     end
     
     def decoded
       if value.blank?
         ""
-      else
+      elsif date = self.formatted_date
         "#{info}; #{formatted_date}" 
+      else
+        info
       end
     end
     

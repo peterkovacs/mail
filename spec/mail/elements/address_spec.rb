@@ -45,7 +45,7 @@ describe Mail::Address do
       end
     end
 
-    ['"-Earnings...Notification-" <vodacom.co.rs>', '<56253817>'].each do |spammy_address|
+    ['<56253817>'].each do |spammy_address|
       it "should allow for funky spammy address #{spammy_address}" do
         Mail::Address.new(spammy_address).address.should == nil
       end
@@ -543,17 +543,17 @@ describe Mail::Address do
       end
 
       it "should handle |jdoe@test   . example|" do
-        pending
+        #pending
         address = Mail::Address.new('jdoe@test   . example')
         address.should break_down_to({
-                                         :name         => 'jdoe@test.example',
-                                         :display_name => 'jdoe@test.example',
-                                         :address      => 'jdoe@test.example',
+                                         :name         => nil,
+                                         :display_name => nil,
+                                         :address      => 'jdoe@test   . example',
                                          :comments     => nil,
-                                         :domain       => 'test.example',
+                                         :domain       => 'test   . example',
                                          :local        => 'jdoe',
-                                         :format       => 'jdoe@test.example',
-                                         :raw          => 'jdoe@test.example'})
+                                         :format       => 'jdoe@test   . example',
+                                         :raw          => 'jdoe@test   . example'})
       end
 
       it "should handle |groupname+domain.com@example.com|" do
@@ -603,6 +603,32 @@ describe Mail::Address do
                                          :raw          => email_address})
       end
 
+      it "should handle |local@example.com <local@example.com>|" do
+	address = Mail::Address.new( "local@example.com <local@example.com>" )
+        address.should break_down_to({
+                                         :name         => "local@example.com",
+                                         :display_name => "local@example.com",
+                                         :address      => "local@example.com",
+                                         :comments     => nil,
+                                         :domain       => 'example.com',
+                                         :local        => "local",
+                                         :format       => "\"local@example.com\" <local@example.com>",
+                                         :raw          => "local@example.com <local@example.com>"})
+      end
+
+      it "should handle |<local@example.com> <local@example.com>|" do
+	address = Mail::Address.new( "<local@example.com> <local@example.com>" )
+        address.should break_down_to({
+                                         :name         => "<local@example.com>",
+                                         :display_name => "<local@example.com>",
+                                         :address      => "local@example.com",
+                                         :comments     => nil,
+                                         :domain       => 'example.com',
+                                         :local        => "local",
+                                         :format       => "\"<local@example.com>\" <local@example.com>",
+                                         :raw          => "<local@example.com> <local@example.com>"})
+      end
+
       it "should handle |local.@example.com|" do
         address = Mail::Address.new("local.@example.com")
         address.should break_down_to({
@@ -627,6 +653,62 @@ describe Mail::Address do
                                          :local        => "local",
                                          :format       => "First Last <local>",
                                          :raw          => "First Last <local>"})
+      end
+
+      it "should handle |First Last|" do
+        pending
+	address = Mail::Address.new( "First Last" )
+        address.should break_down_to({
+                                         :name         => "First Last",
+                                         :display_name => "First Last",
+                                         :address      => nil,
+                                         :comments     => nil,
+                                         :domain       => nil,
+                                         :local        => nil,
+                                         :format       => "First Last",
+                                         :raw          => "First Last"})
+      end
+
+      it "should handle |(Recipient List Suppressed)|" do
+        pending 
+	address = Mail::Address.new( "(Recipient List Suppressed)" )
+        address.should break_down_to({
+                                         :name         => nil,
+                                         :display_name => nil,
+                                         :address      => nil,
+                                         :comments     => 'Recipient List Suppressed',
+                                         :domain       => nil,
+                                         :local        => nil,
+                                         :format       => "First Last",
+                                         :raw          => "First Last"})
+      end
+
+      it "should handle |<local@$ (HOSTNAME).example>|" do
+        address = Mail::Address.new( "<local@$ (HOSTNAME).example>" ) 
+        address.should break_down_to({ 
+                                         :name         => 'HOSTNAME',
+                                         :display_name => nil,
+                                         :address      => 'local@$ .example',
+                                         :comments     => ['HOSTNAME'],
+                                         :domain       => '$ .example',
+                                         :local        => 'local',
+                                         :format       => 'local@$ .example (HOSTNAME)',
+                                         :raw          => '<local@$ (HOSTNAME).example>'
+        })
+      end
+
+      it "should handle |local@|" do
+        address = Mail::Address.new( "local@" ) 
+        address.should break_down_to({ 
+                                         :name         => nil,
+                                         :display_name => nil,
+                                         :address      => 'local',
+                                         :comments     => nil,
+                                         :domain       => nil,
+                                         :local        => 'local',
+                                         :format       => 'local',
+                                         :raw          => 'local@'
+        })
       end
 
     end

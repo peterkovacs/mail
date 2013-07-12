@@ -12,6 +12,9 @@ module Mail
     include RFC2822
 
     module Version0
+    end
+
+    module Version1
       def CFWS1
         elements[0]
       end
@@ -25,11 +28,11 @@ module Mail
       end
 
       def CFWS2
-        elements[6]
+        elements[7]
       end
     end
 
-    module Version1
+    module Version2
       def major
         major_digits
       end
@@ -113,8 +116,50 @@ module Mail
                 end
                 s0 << r9
                 if r9
-                  r11 = _nt_CFWS
+                  i12, s12 = index, []
+                  if has_terminal?(";", false, index)
+                    r13 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                    @index += 1
+                  else
+                    terminal_parse_failure(";")
+                    r13 = nil
+                  end
+                  s12 << r13
+                  if r13
+                    s14, i14 = [], index
+                    loop do
+                      r15 = _nt_atom
+                      if r15
+                        s14 << r15
+                      else
+                        break
+                      end
+                    end
+                    if s14.empty?
+                      @index = i14
+                      r14 = nil
+                    else
+                      r14 = instantiate_node(SyntaxNode,input, i14...index, s14)
+                    end
+                    s12 << r14
+                  end
+                  if s12.last
+                    r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
+                    r12.extend(Version0)
+                  else
+                    @index = i12
+                    r12 = nil
+                  end
+                  if r12
+                    r11 = r12
+                  else
+                    r11 = instantiate_node(SyntaxNode,input, index...index)
+                  end
                   s0 << r11
+                  if r11
+                    r16 = _nt_CFWS
+                    s0 << r16
+                  end
                 end
               end
             end
@@ -123,8 +168,8 @@ module Mail
       end
       if s0.last
         r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-        r0.extend(Version0)
         r0.extend(Version1)
+        r0.extend(Version2)
       else
         @index = i0
         r0 = nil

@@ -65,4 +65,25 @@ describe Mail::InReplyToField do
       t.message_ids.should == ['<1234@test.lindsaar.net>', '<4567@test.lindsaar.net>']
     end
   end
+
+  describe "handling extra tokens" do
+    # Seen from X-Mailer: ELM [version 2.5 PL6]
+    it "should handle extra tokens" do
+      t = Mail::InReplyToField.new( '<20050202135402.GT12263@xxxx> from "First Last" at Feb 02, 2005 08:54:02 AM' )
+      t.name.should == 'In-Reply-To'
+      t.message_id.should == '<20050202135402.GT12263@xxxx>'
+    end
+
+    it "should handle <20010307181747.A1531@socrate>; from address on date" do
+      t = Mail::InReplyToField.new( '<20010307181747.A1531@socrate>; from xxx@yyy.com on Wed, Mar 07, 2001 at 06:17:47PM +0100' )
+      t.name.should == 'In-Reply-To'
+      t.message_ids.should == ['<20010307181747.A1531@socrate>']
+    end
+
+    it "should handle <msg_id>;" do
+      t = Mail::InReplyToField.new( '<20010307181747.A1531@socrate>;' )
+      t.name.should == 'In-Reply-To'
+      t.message_ids.should == ['<20010307181747.A1531@socrate>']
+    end
+  end
 end

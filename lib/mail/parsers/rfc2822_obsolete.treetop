@@ -48,7 +48,7 @@ module Mail
     end
 
     rule obs_hour
-       CFWS? (DIGIT DIGIT) CFWS?
+       CFWS? (DIGIT DIGIT?) CFWS?
     end
 
     rule obs_minute

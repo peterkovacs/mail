@@ -12,13 +12,27 @@ module Mail
     include RFC2822
 
     module Primary0
+      def CFWS
+        elements[0]
+      end
+
+      def name_val_list
+        elements[1]
+      end
+    end
+
+    module Primary1
+      def date_time
+        elements[1]
+      end
+
+    end
+
+    module Primary2
       def name_val_list
         elements[0]
       end
 
-      def date_time
-        elements[2]
-      end
     end
 
     def _nt_primary
@@ -36,22 +50,58 @@ module Mail
       r1 = _nt_name_val_list
       s0 << r1
       if r1
+        i3, s3 = index, []
         if has_terminal?(";", false, index)
-          r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
           @index += 1
         else
           terminal_parse_failure(";")
-          r2 = nil
+          r4 = nil
+        end
+        s3 << r4
+        if r4
+          r5 = _nt_date_time
+          s3 << r5
+          if r5
+            i7, s7 = index, []
+            r8 = _nt_CFWS
+            s7 << r8
+            if r8
+              r9 = _nt_name_val_list
+              s7 << r9
+            end
+            if s7.last
+              r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+              r7.extend(Primary0)
+            else
+              @index = i7
+              r7 = nil
+            end
+            if r7
+              r6 = r7
+            else
+              r6 = instantiate_node(SyntaxNode,input, index...index)
+            end
+            s3 << r6
+          end
+        end
+        if s3.last
+          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+          r3.extend(Primary1)
+        else
+          @index = i3
+          r3 = nil
+        end
+        if r3
+          r2 = r3
+        else
+          r2 = instantiate_node(SyntaxNode,input, index...index)
         end
         s0 << r2
-        if r2
-          r3 = _nt_date_time
-          s0 << r3
-        end
       end
       if s0.last
         r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-        r0.extend(Primary0)
+        r0.extend(Primary2)
       else
         @index = i0
         r0 = nil
