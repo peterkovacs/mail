@@ -219,5 +219,56 @@ module Mail
 
     end
 
+    if RUBY_VERSION >= "1.9"
+      class ParseBuffer < Array
+        attr_accessor :encoding
+
+        def initialize( s )
+          super( s.bytes.to_a )
+          self.encoding = s.encoding
+        end
+
+        def []( *i )
+          case data = super(*i)
+          when Integer
+            data
+          when Array
+            data.pack( 'C*' ).force_encoding( self.encoding )
+          end
+        end
+
+        def to_s
+          pack( 'C*' ).force_encoding( self.encoding )
+        end
+
+        def inspect
+          map(&:chr).inspect
+        end
+      end
+    else
+      class ParseBuffer < Array
+        def initialize( s )
+          super( s.bytes.to_a )
+        end
+
+        def []( *i )
+          case data = super(*i)
+          when Integer
+            data
+          when Array
+            data.pack( 'C*' )
+          end
+        end
+
+        def to_s
+          pack( 'C*' )
+        end
+
+        def inspect
+          map(&:chr).inspect
+        end
+      end
+    end
+
   end
 end

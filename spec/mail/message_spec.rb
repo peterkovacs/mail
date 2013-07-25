@@ -527,17 +527,17 @@ describe Mail::Message do
         message.comments.should      eq 'this is a comment'
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
-        message.in_reply_to.should   eq '1234@in_reply_to.lindsaar.net'
+        message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
         message.keywords.should      eq ["test", "of the new mail", "system"]
-        message.message_id.should    eq '1234@message_id.lindsaar.net'
+        message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.date_time.should      eq DateTime.parse('12 Aug 2009 00:00:02 GMT')
-        message.references.should    eq '1234@references.lindsaar.net'
+        message.references.should    eq '<1234@references.lindsaar.net>'
         message.reply_to.should      eq ['mikel@reply-to.lindsaar.net']
         message.resent_bcc.should    eq ['mikel@resent-bcc.lindsaar.net']
         message.resent_cc.should     eq ['mikel@resent-cc.lindsaar.net']
         message.resent_date.should   eq DateTime.parse('12 Aug 2009 00:00:03 GMT')
         message.resent_from.should   eq ['mikel@resent-from.lindsaar.net']
-        message.resent_message_id.should eq '1234@resent_message_id.lindsaar.net'
+        message.resent_message_id.should eq '<1234@resent_message_id.lindsaar.net>'
         message.resent_sender.should eq ['mikel@resent-sender.lindsaar.net']
         message.resent_to.should     eq ['mikel@resent-to.lindsaar.net']
         message.sender.should        eq 'mikel@sender.lindsaar.net'
@@ -588,17 +588,17 @@ describe Mail::Message do
         message.comments.should      eq 'this is a comment'
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
-        message.in_reply_to.should   eq '1234@in_reply_to.lindsaar.net'
+        message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
         message.keywords.should      eq ["test", "of the new mail", "system"]
-        message.message_id.should    eq '1234@message_id.lindsaar.net'
+        message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.date_time.should      eq DateTime.parse('12 Aug 2009 00:00:02 GMT')
-        message.references.should    eq '1234@references.lindsaar.net'
+        message.references.should    eq '<1234@references.lindsaar.net>'
         message.reply_to.should      eq ['mikel@reply-to.lindsaar.net']
         message.resent_bcc.should    eq ['mikel@resent-bcc.lindsaar.net']
         message.resent_cc.should     eq ['mikel@resent-cc.lindsaar.net']
         message.resent_date.should   eq DateTime.parse('12 Aug 2009 00:00:03 GMT')
         message.resent_from.should   eq ['mikel@resent-from.lindsaar.net']
-        message.resent_message_id.should eq '1234@resent_message_id.lindsaar.net'
+        message.resent_message_id.should eq '<1234@resent_message_id.lindsaar.net>'
         message.resent_sender.should eq ['mikel@resent-sender.lindsaar.net']
         message.resent_to.should     eq ['mikel@resent-to.lindsaar.net']
         message.sender.should        eq 'mikel@sender.lindsaar.net'
@@ -649,17 +649,17 @@ describe Mail::Message do
         message.comments.should      eq 'this is a comment'
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
-        message.in_reply_to.should   eq '1234@in_reply_to.lindsaar.net'
+        message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
         message.keywords.should      eq ["test", "of the new mail", "system"]
-        message.message_id.should    eq '1234@message_id.lindsaar.net'
+        message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.date_time.should      eq DateTime.parse('12 Aug 2009 00:00:02 GMT')
-        message.references.should    eq '1234@references.lindsaar.net'
+        message.references.should    eq '<1234@references.lindsaar.net>'
         message.reply_to.should      eq ['mikel@reply-to.lindsaar.net']
         message.resent_bcc.should    eq ['mikel@resent-bcc.lindsaar.net']
         message.resent_cc.should     eq ['mikel@resent-cc.lindsaar.net']
         message.resent_date.should   eq DateTime.parse('12 Aug 2009 00:00:03 GMT')
         message.resent_from.should   eq ['mikel@resent-from.lindsaar.net']
-        message.resent_message_id.should eq '1234@resent_message_id.lindsaar.net'
+        message.resent_message_id.should eq '<1234@resent_message_id.lindsaar.net>'
         message.resent_sender.should eq ['mikel@resent-sender.lindsaar.net']
         message.resent_to.should     eq ['mikel@resent-to.lindsaar.net']
         message.sender.should        eq 'mikel@sender.lindsaar.net'
@@ -710,17 +710,17 @@ describe Mail::Message do
         message.comments.should      eq 'this is a comment'
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
-        message.in_reply_to.should   eq '1234@in_reply_to.lindsaar.net'
+        message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
         message.keywords.should      eq ["test", "of the new mail", "system"]
-        message.message_id.should    eq '1234@message_id.lindsaar.net'
+        message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.date_time.should      eq DateTime.parse('12 Aug 2009 00:00:02 GMT')
-        message.references.should    eq '1234@references.lindsaar.net'
+        message.references.should    eq '<1234@references.lindsaar.net>'
         message.reply_to.should      eq ['mikel@reply-to.lindsaar.net']
         message.resent_bcc.should    eq ['mikel@resent-bcc.lindsaar.net']
         message.resent_cc.should     eq ['mikel@resent-cc.lindsaar.net']
         message.resent_date.should   eq DateTime.parse('12 Aug 2009 00:00:03 GMT')
         message.resent_from.should   eq ['mikel@resent-from.lindsaar.net']
-        message.resent_message_id.should eq '1234@resent_message_id.lindsaar.net'
+        message.resent_message_id.should eq '<1234@resent_message_id.lindsaar.net>'
         message.resent_sender.should eq ['mikel@resent-sender.lindsaar.net']
         message.resent_to.should     eq ['mikel@resent-to.lindsaar.net']
         message.sender.should        eq 'mikel@sender.lindsaar.net'
@@ -772,17 +772,17 @@ describe Mail::Message do
         message.comments.should      eq 'this is a comment'
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
-        message.in_reply_to.should   eq '1234@in_reply_to.lindsaar.net'
+        message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
         message.keywords.should      eq ["test", "of the new mail", "system"]
-        message.message_id.should    eq '1234@message_id.lindsaar.net'
+        message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.date_time.should      eq DateTime.parse('12 Aug 2009 00:00:02 GMT')
-        message.references.should    eq '1234@references.lindsaar.net'
+        message.references.should    eq '<1234@references.lindsaar.net>'
         message.reply_to.should      eq ['mikel@reply-to.lindsaar.net']
         message.resent_bcc.should    eq ['mikel@resent-bcc.lindsaar.net']
         message.resent_cc.should     eq ['mikel@resent-cc.lindsaar.net']
         message.resent_date.should   eq DateTime.parse('12 Aug 2009 00:00:03 GMT')
         message.resent_from.should   eq ['mikel@resent-from.lindsaar.net']
-        message.resent_message_id.should eq '1234@resent_message_id.lindsaar.net'
+        message.resent_message_id.should eq '<1234@resent_message_id.lindsaar.net>'
         message.resent_sender.should eq ['mikel@resent-sender.lindsaar.net']
         message.resent_to.should     eq ['mikel@resent-to.lindsaar.net']
         message.sender.should        eq 'mikel@sender.lindsaar.net'
@@ -834,17 +834,17 @@ describe Mail::Message do
         message.comments.should      eq 'this is a comment'
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
-        message.in_reply_to.should   eq '1234@in_reply_to.lindsaar.net'
+        message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
         message.keywords.should      eq ["test", "of the new mail", "system"]
-        message.message_id.should    eq '1234@message_id.lindsaar.net'
+        message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.date_time.should      eq DateTime.parse('12 Aug 2009 00:00:02 GMT')
-        message.references.should    eq '1234@references.lindsaar.net'
+        message.references.should    eq '<1234@references.lindsaar.net>'
         message.reply_to.should      eq ['mikel@reply-to.lindsaar.net']
         message.resent_bcc.should    eq ['mikel@resent-bcc.lindsaar.net']
         message.resent_cc.should     eq ['mikel@resent-cc.lindsaar.net']
         message.resent_date.should   eq DateTime.parse('12 Aug 2009 00:00:03 GMT')
         message.resent_from.should   eq ['mikel@resent-from.lindsaar.net']
-        message.resent_message_id.should eq '1234@resent_message_id.lindsaar.net'
+        message.resent_message_id.should eq '<1234@resent_message_id.lindsaar.net>'
         message.resent_sender.should eq ['mikel@resent-sender.lindsaar.net']
         message.resent_to.should     eq ['mikel@resent-to.lindsaar.net']
         message.sender.should        eq 'mikel@sender.lindsaar.net'
@@ -1364,22 +1364,22 @@ describe Mail::Message do
         m1 = Mail.new("To: mikel@test.lindsaar.net\r\nMessage-ID: <1234@test.lindsaar.net>\r\nSubject: Yo!\r\n\r\nHello there")
         m2 = Mail.new("To: mikel@test.lindsaar.net\r\nSubject: Yo!\r\n\r\nHello there")
         (m1 == m2).should be_true # confirm the side-effects of the comparison
-        m1.message_id.should eq '1234@test.lindsaar.net'
+        m1.message_id.should eq '<1234@test.lindsaar.net>'
       end
 
       it "should preserve the message id of other if set" do
         m1 = Mail.new("To: mikel@test.lindsaar.net\r\nSubject: Yo!\r\n\r\nHello there")
         m2 = Mail.new("To: mikel@test.lindsaar.net\r\nMessage-ID: <1234@test.lindsaar.net>\r\nSubject: Yo!\r\n\r\nHello there")
         (m1 == m2).should be_true # confirm the side-effects of the comparison
-        m2.message_id.should eq '1234@test.lindsaar.net'
+        m2.message_id.should == '<1234@test.lindsaar.net>'
       end
 
       it "should preserve the message id of both if set" do
         m1 = Mail.new("To: mikel@test.lindsaar.net\r\nMessage-ID: <4321@test.lindsaar.net>\r\nSubject: Yo!\r\n\r\nHello there")
         m2 = Mail.new("To: mikel@test.lindsaar.net\r\nMessage-ID: <1234@test.lindsaar.net>\r\nSubject: Yo!\r\n\r\nHello there")
         (m1 == m2).should be_false # confirm the side-effects of the comparison
-        m1.message_id.should eq '4321@test.lindsaar.net'
-        m2.message_id.should eq '1234@test.lindsaar.net'
+        m1.message_id.should eq '<4321@test.lindsaar.net>'
+        m2.message_id.should eq '<1234@test.lindsaar.net>'
       end
     end
 
@@ -1661,11 +1661,11 @@ describe Mail::Message do
       end
 
       it "should be in-reply-to the original message" do
-        @mail.reply.in_reply_to.should eq '6B7EC235-5B17-4CA8-B2B8-39290DEB43A3@test.lindsaar.net'
+        @mail.reply.in_reply_to.should eq '<6B7EC235-5B17-4CA8-B2B8-39290DEB43A3@test.lindsaar.net>'
       end
 
       it "should reference the original message" do
-        @mail.reply.references.should eq '6B7EC235-5B17-4CA8-B2B8-39290DEB43A3@test.lindsaar.net'
+        @mail.reply.references.should eq '<6B7EC235-5B17-4CA8-B2B8-39290DEB43A3@test.lindsaar.net>'
       end
 
       it "should RE: the original subject" do
@@ -1723,11 +1723,11 @@ describe Mail::Message do
       end
 
       it "should be in-reply-to the original message" do
-        @mail.reply.in_reply_to.should eq '473FFE27.20003@xxx.org'
+        @mail.reply.in_reply_to.should eq '<473FFE27.20003@xxx.org>'
       end
 
       it "should append to the original's references list" do
-        @mail.reply[:references].message_ids.should eq ['473FF3B8.9020707@xxx.org', '348F04F142D69C21-291E56D292BC@xxxx.net', '473FFE27.20003@xxx.org']
+        @mail.reply[:references].message_ids.should eq ['<473FF3B8.9020707@xxx.org>', '<348F04F142D69C21-291E56D292BC@xxxx.net>', '<473FFE27.20003@xxx.org>']
       end
 
       it "should not append another RE:" do
@@ -1741,12 +1741,12 @@ describe Mail::Message do
       before do
         @mail = Mail.new do
           in_reply_to '<1234@test.lindsaar.net>'
-          message_id '5678@test.lindsaar.net'
+          message_id '<5678@test.lindsaar.net>'
         end
       end
 
       it "should have a references consisting of the in-reply-to and message_id fields" do
-        @mail.reply[:references].message_ids.should eq ['1234@test.lindsaar.net', '5678@test.lindsaar.net']
+        @mail.reply[:references].message_ids.should eq ['<1234@test.lindsaar.net>', '<5678@test.lindsaar.net>']
       end
 
     end
@@ -1756,7 +1756,7 @@ describe Mail::Message do
       before do
         @mail = Mail.new do
           in_reply_to '<1234@test.lindsaar.net> <5678@test.lindsaar.net>'
-          message_id '90@test.lindsaar.net'
+          message_id '<90@test.lindsaar.net>'
         end
       end
 

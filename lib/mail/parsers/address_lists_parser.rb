@@ -14,6 +14,7 @@ module Mail::Parsers
         raise Mail::Field::ParseError.new(Mail::AddressList, s, error)
       end
 
+      s = Mail::Utilities::ParseBuffer.new( s )
 
       phrase_s = phrase_e = qstr_s = qstr = comment_s = nil
       group_name_s = domain_s = group_name = nil

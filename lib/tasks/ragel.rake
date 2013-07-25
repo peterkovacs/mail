@@ -31,6 +31,7 @@ namespace :ragel do
     path = "#{RB_GEN_DIR}/#{p}_machine.rb.rl"
     RB_RAGEL_PARSERS << path
     file path do
+      puts "Generating #{path}"
       File.open(path, "w+") { |f| f.write(generate_rb_ragel_file(p)) }
     end
   end
@@ -43,6 +44,7 @@ namespace :ragel do
     path = ragel_path.gsub(".rl", "")
     RB_PARSERS << path
     file path do
+      puts "ragel -sR -F1 -o #{path} #{ragel_path}"
       `ragel -sR -F1 -o #{path} #{ragel_path}`
     end
   end
@@ -51,4 +53,11 @@ namespace :ragel do
 
   desc "Generate ruby parsers from ragel files"
   task :generate => [:generate_ragel_files, :generate_ruby_parsers]
+
+  task :clean do
+    ( RB_PARSERS + [ RB_ACTIONS ] + RB_RAGEL_PARSERS ).each do |file|
+      File.delete( file ) if File.exists?( file )
+    end
+  end
+
 end

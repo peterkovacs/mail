@@ -11,6 +11,8 @@ module Mail::Parsers
         raise Mail::Field::ParseError.new(Mail::ContentLocationElement, s, error)
       end
 
+      s = Mail::Utilities::ParseBuffer.new( s )
+
       qstr_s = token_string_s = nil
       actions.each_slice(2) do |action_id, p|
         action = Mail::Parsers::Ragel::ACTIONS[action_id]

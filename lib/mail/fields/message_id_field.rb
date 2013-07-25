@@ -61,7 +61,7 @@ module Mail
     end
     
     def to_s
-      "<#{message_id}>"
+      message_id
     end
     
     def encoded

@@ -11,6 +11,8 @@ module Mail::Parsers
         raise Mail::Field::ParseError.new(Mail::EnvelopeFromElement, s, error)
       end
 
+      s = Mail::Utilities::ParseBuffer.new( s )
+
       address_s = ctime_date_s = nil
       envelope_from = EnvelopeFromStruct.new
       actions.each_slice(2) do |action_id, p|

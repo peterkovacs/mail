@@ -7,6 +7,8 @@ module Mail::Parsers
         raise Mail::Field::ParseError.new(Mail::ReceivedElement, s, error)
       end
 
+      s = Mail::Utilities::ParseBuffer.new( s )
+
       received = ReceivedStruct.new
 
       received_tokens_s = date_s = time_s = nil
@@ -17,7 +19,10 @@ module Mail::Parsers
         # Received Tokens:
         when :received_tokens_s then received_tokens_s = p
         when :received_tokens_e
-          received.info = s[received_tokens_s..(p-1)]
+          received.info ||= [] 
+          unless s[received_tokens_s..(p-1)].blank?
+            received.info << s[received_tokens_s..(p-1)].strip 
+          end
 
         # Date
         when :date_s then date_s = p

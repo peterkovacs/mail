@@ -64,14 +64,14 @@ describe Mail::MessageIdField do
       m = Mail::MessageIdField.new('Message-ID: <1234@test.lindsaar.net>')
       m.name.should eq 'Message-ID'
       m.value.should eq '<1234@test.lindsaar.net>'
-      m.message_id.should eq '1234@test.lindsaar.net'
+      m.message_id.should eq '<1234@test.lindsaar.net>'
     end
 
     it "should accept a string without the field name" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
       m.name.should eq 'Message-ID'
       m.value.should eq '<1234@test.lindsaar.net>'
-      m.message_id.should eq '1234@test.lindsaar.net'
+      m.message_id.should eq '<1234@test.lindsaar.net>'
     end
 
     it "should accept a nil value and generate a message_id" do
@@ -88,8 +88,8 @@ describe Mail::MessageIdField do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net> <4567@test.lindsaar.net>')
       m.name.should eq 'Message-ID'
       m.to_s.should eq '<1234@test.lindsaar.net>'
-      m.message_id.should eq '1234@test.lindsaar.net'
-      m.message_ids.should eq ['1234@test.lindsaar.net']
+      m.message_id.should eq '<1234@test.lindsaar.net>'
+      m.message_ids.should eq ['<1234@test.lindsaar.net>']
     end
 
     it "should change the message id if given a new message id" do
@@ -105,7 +105,7 @@ describe Mail::MessageIdField do
     it "should provide to_s" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
       m.to_s.should eq '<1234@test.lindsaar.net>'
-      m.message_id.to_s.should eq '1234@test.lindsaar.net'
+      m.message_id.to_s.should eq '<1234@test.lindsaar.net>'
     end
 
     it "should provide encoded" do
@@ -141,7 +141,33 @@ describe Mail::MessageIdField do
   describe "weird message IDs" do
     it "should be able to parse <000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>" do
       m = Mail::MessageIdField.new('<000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>')
-      m.message_id.should eq '000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com'
+      m.message_id.should eq '<000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>'
     end
+
+    it "should be able to parse <.AAA-default-12226,16.1089643496@us-bdb-1201.vdc.amazon.com>" do
+      m = Mail::MessageIdField.new('<.AAA-default-12226,16.1089643496@us-bdb-1201.vdc.amazon.com>')
+      m.message_id.should == '<.AAA-default-12226,16.1089643496@us-bdb-1201.vdc.amazon.com>'
+    end
+
+    it "should be able to parse <091720041340.19561.414AE9430005E91000004C6922007589429B0702040790040A0E08 0C0703@comcast.net>" do
+      m = Mail::MessageIdField.new( '<091720041340.19561.414AE9430005E91000004C6922007589429B0702040790040A0E08 0C0703@comcast.net>')
+      m.message_id.should == '<091720041340.19561.414AE9430005E91000004C6922007589429B0702040790040A0E08 0C0703@comcast.net>'
+    end
+
+    it "should be able to parse <3851.1096568577MSOSI1188307:1OSIMS@gamefly.com>" do
+      m = Mail::MessageIdField.new( '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com>')
+      m.message_id.should == '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com>'
+    end
+
+    it "should be able to parse <3851.1096568577MSOSI1188307:1OSIMS@gamefly.com >" do
+      m = Mail::MessageIdField.new( '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com >')
+      m.message_id.should == '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com >'
+    end
+
+    it "should be able to parse <000301caf03a$77d922ae$82dba8c0@.pool.ukrtel.net>" do
+      m = Mail::MessageIdField.new( '<000301caf03a$77d922ae$82dba8c0@.pool.ukrtel.net>')
+      m.message_id.should == '<000301caf03a$77d922ae$82dba8c0@.pool.ukrtel.net>'
+    end
+  
   end
 end

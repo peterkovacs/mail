@@ -261,16 +261,15 @@ module Mail
     def reply(*args, &block)
       self.class.new.tap do |reply|
         if message_id
-          bracketed_message_id = "<#{message_id}>"
-          reply.in_reply_to = bracketed_message_id
+          reply.in_reply_to = message_id
           if !references.nil?
-            refs = [references].flatten.map { |r| "<#{r}>" }
-            refs << bracketed_message_id
+            refs = [references].flatten
+            refs << message_id
             reply.references = refs.join(' ')
           elsif !in_reply_to.nil? && !in_reply_to.kind_of?(Array)
-            reply.references = "<#{in_reply_to}> #{bracketed_message_id}"
+            reply.references = "#{in_reply_to} #{message_id}"
           end
-          reply.references ||= bracketed_message_id
+          reply.references ||= message_id
         end
         if subject
           reply.subject = subject =~ /^Re:/i ? subject : "RE: #{subject}"
@@ -358,8 +357,8 @@ module Mail
         self_message_id, other_message_id = self.message_id, other.message_id
         self.message_id, other.message_id = '<temp@test>', '<temp@test>'
         result = self.encoded == other.encoded
-        self.message_id = "<#{self_message_id}>" if self_message_id
-        other.message_id = "<#{other_message_id}>" if other_message_id
+        self.message_id = self_message_id if self_message_id
+        other.message_id = other_message_id if other_message_id
         result
       end
     end

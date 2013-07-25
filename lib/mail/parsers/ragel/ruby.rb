@@ -17,7 +17,8 @@ module Mail
           :content_type => ContentTypeMachine,
           :content_disposition => ContentDispositionMachine,
           :content_transfer_encoding => ContentTransferEncodingMachine,
-          :content_location => ContentLocationMachine
+          :content_location => ContentLocationMachine,
+          :in_reply_to => InReplyToMachine
         }
 
         def self.parse(machine, string)

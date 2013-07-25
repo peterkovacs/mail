@@ -14,6 +14,8 @@ module Mail::Parsers
         raise Mail::Field::ParseError.new(Mail::MimeVersionElement, s, error)
       end
 
+      s = ParseBuffer.new( s )
+
       major_digits_s = minor_digits_s = nil
       actions.each_slice(2) do |action_id, p|
         action = Mail::Parsers::Ragel::ACTIONS[action_id]

@@ -41,7 +41,7 @@ module Mail
     end
 
     def formated_message_ids(join)
-      message_ids.map{ |m| "<#{m}>" }.join(join) if message_ids
+      message_ids.join(join) if message_ids
     end
 
   end

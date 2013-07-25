@@ -24,7 +24,7 @@
   second = DIGIT DIGIT | obs_second;
   obs_zone = "UT" | "GMT" | "EST" | "EDT" | "CST" | "CDT" | "MST" | "MDT" | "PST" | "PDT" | 0x41..0x49 | 0x4B..0x5A | 0x61..0x69 | 0x6B..0x7A;
   time_of_day = hour ":" minute (":" second)?;
-  zone = FWS ((("+" | "-") DIGIT DIGIT DIGIT DIGIT) | obs_zone);
+  zone = FWS ((("+" | "-") DIGIT DIGIT DIGIT DIGIT?) | obs_zone);
   time = time_of_day zone;
 
 }%%

@@ -22,22 +22,22 @@ describe Mail::ReferencesField do
     t = Mail::ReferencesField.new('References: <1234@test.lindsaar.net>')
     t.name.should eq 'References'
     t.value.should eq '<1234@test.lindsaar.net>'
-    t.message_id.should eq '1234@test.lindsaar.net'
+    t.message_id.should eq '<1234@test.lindsaar.net>'
   end
   
   it "should accept a string without the field name" do
     t = Mail::ReferencesField.new('<1234@test.lindsaar.net>')
     t.name.should eq 'References'
     t.value.should eq '<1234@test.lindsaar.net>'
-    t.message_id.should eq '1234@test.lindsaar.net'
+    t.message_id.should eq '<1234@test.lindsaar.net>'
   end
 
   it "should accept multiple message ids" do
     t = Mail::ReferencesField.new('<1234@test.lindsaar.net> <5678@test.lindsaar.net>')
     t.name.should eq 'References'
     t.value.should eq '<1234@test.lindsaar.net> <5678@test.lindsaar.net>'
-    t.message_id.should eq '1234@test.lindsaar.net'
-    t.message_ids.should eq ['1234@test.lindsaar.net', '5678@test.lindsaar.net']
+    t.message_id.should eq '<1234@test.lindsaar.net>'
+    t.message_ids.should eq ['<1234@test.lindsaar.net>', '<5678@test.lindsaar.net>']
     t.to_s.should eq '<1234@test.lindsaar.net> <5678@test.lindsaar.net>'
   end
 

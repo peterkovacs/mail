@@ -5,7 +5,7 @@ module Mail
     include Mail::Utilities
     
     def initialize(string)
-      @message_ids = Mail::Parsers::MessageIdsParser.new.parse(string).message_ids.map { |msg_id| clean_msg_id(msg_id) }
+      @message_ids = Mail::Parsers::MessageIdsParser.new.parse(string).message_ids
     end
     
     def message_ids
@@ -16,9 +16,5 @@ module Mail
       @message_ids.first
     end
     
-    def clean_msg_id( val )
-      val =~ /.*<(.*)>.*/ ; $1
-    end
-
   end
 end

@@ -55,7 +55,8 @@ module Mail
       FIELD_PARSERS = %w[ address_lists phrase_lists
                           date_time received message_ids envelope_from
                           mime_version content_type content_disposition
-                          content_transfer_encoding content_location ]
+                          content_transfer_encoding content_location
+                          in_reply_to ]
     end
   end
 end

@@ -4,7 +4,8 @@
   include rb_actions "rb_actions.rl";
   include common "../../common.rl";
 
-  getkey data_unpacked[p];
+  getkey data.at(p);
+  alphtype int;
 
   main := received;
 }%%
@@ -17,18 +18,18 @@ module Mail
 
         def self.parse(data)
           p = 0
-          eof = data.length
           stack = []
 
           actions = []
-          data_unpacked = data.bytes.to_a
+          data = Utilities::ParseBuffer.new( data )
+          eof = data.length
           %%write init;
           %%write exec;
 
           if p == eof && cs >= %%{ write first_final; }%%
             return actions, nil
           else
-            return [], "Only able to parse up to #{data[0..p]}"
+            return [], "Only able to parse up to #{data[0..p]}/#{p} but should have gotten to #{eof}"
           end
         end
       end

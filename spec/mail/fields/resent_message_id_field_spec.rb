@@ -11,14 +11,14 @@ describe Mail::ResentMessageIdField do
     t = Mail::ResentMessageIdField.new('Resent-Message-ID: <1234@test.lindsaar.net>')
     t.name.should eq 'Resent-Message-ID'
     t.value.should eq '<1234@test.lindsaar.net>'
-    t.message_id.should eq '1234@test.lindsaar.net'
+    t.message_id.should eq '<1234@test.lindsaar.net>'
   end
   
   it "should accept a string without the field name" do
     t = Mail::ResentMessageIdField.new('<1234@test.lindsaar.net>')
     t.name.should eq 'Resent-Message-ID'
     t.value.should eq '<1234@test.lindsaar.net>'
-    t.message_id.should eq '1234@test.lindsaar.net'
+    t.message_id.should eq '<1234@test.lindsaar.net>'
   end
 
   it "should output lines shorter than 998 chars" do

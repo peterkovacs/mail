@@ -10,6 +10,8 @@ module Mail::Parsers
         raise Mail::Field::ParseError.new(Mail::DateTimeElement, s, error)
       end
 
+      s = Mail::Utilities::ParseBuffer.new( s )
+
       date_s = time_s = nil
       actions.each_slice(2) do |action_id, p|
         action = Mail::Parsers::Ragel::ACTIONS[action_id]

@@ -13,6 +13,8 @@ module Mail::Parsers
         raise Mail::Field::ParseError.new(Mail::ContentDispositionElement, s, error)
       end
 
+      s = Mail::Utilities::ParseBuffer.new( s )
+
       content_disposition.parameters = []
 
       disp_type_s = param_attr_s = param_attr = qstr_s = qstr = param_val_s = nil

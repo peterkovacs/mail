@@ -7,6 +7,8 @@ module Mail::Parsers
         raise Mail::Field::ParseError.new(Mail::PhraseList, s, error)
       end
 
+      s = Mail::Utilities::ParseBuffer.new( s )
+
       phrase_lists = PhraseListsStruct.new([])
 
       phrase_s = nil

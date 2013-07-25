@@ -24,19 +24,19 @@
   UTF8_octets = UTF8_char*;
   UTF8_non_ascii = UTF8_2 | UTF8_3 | UTF8_4;
 
-  VCHAR = 0x21..0x7e | 0xa0..0xff | UTF8_non_ascii;
+  VCHAR = 0x21..0x7e | UTF8_non_ascii;
   obs_qp = "\\" (0x00 | obs_NO_WS_CTL | LF | CR);
   obs_FWS = (CRLF? WSP)+;
-  ctext = 0x21..0x27 | 0x2a..0x5b | 0x5d..0x7e | obs_ctext | UTF8_non_ascii;
+  ctext = 0x21..0x27 | 0x2a..0x5b | 0x5d..0x7e | UTF8_non_ascii | obs_ctext;
   quoted_pair = ("\\" (VCHAR | WSP)) | obs_qp;
   FWS = (WSP* CRLF WSP+) | (CRLF WSP+) | obs_FWS;
-  ALPHA = [a-zA-Z] | 0xc0..0xd6 | 0xd8 .. 0xf6 | 0xf8 .. 0xff;
+  ALPHA = [a-zA-Z] | 0xa0..0xff;
   DIGIT = [0-9];
   DQUOTE = '"';
   obs_qtext = obs_NO_WS_CTL;
   atext = ALPHA | DIGIT | "!" | "#" | "$" | "%" | "&" |
           "'" | "*" | "+" | "-" | "/" | "=" | "?" | "^" |
-          "_" | "`" | "{" | "|" | "}" | "~" | 0xa0..0xff | UTF8_non_ascii;
+          "_" | "`" | "{" | "|" | "}" | "~" | UTF8_non_ascii;
   qtext = 0x21 | 0x23..0x5b | 0x5d..0x7e | obs_qtext | UTF8_non_ascii;
   obs_dtext = obs_NO_WS_CTL | quoted_pair;
   qcontent = qtext | quoted_pair;
@@ -64,7 +64,7 @@
   # address_lists
 
   # local_part:
-  domain_text = (DQUOTE (FWS? qcontent)+ FWS? DQUOTE) | atext+;
+  domain_text = (DQUOTE (FWS? qcontent)+ FWS? DQUOTE) | atext+ ;
   local_dot_atom_text = ("."* domain_text "."*)+;
   local_dot_atom = CFWS?
                    (local_dot_atom_text >local_dot_atom_s %local_dot_atom_pre_comment_e)
@@ -74,13 +74,9 @@
                 (quoted_string %local_quoted_string_e) |
                 obs_local_part);
 
-  # Treetop parser behavior was to ignore addresses missing '@' inside of angle
-  # brackets. This construction preserves that behavior.
-  local_part_no_capture = (local_dot_atom | quoted_string | obs_local_part);
-
   # domain:
   dot_atom_text = "."* domain_text ("."* domain_text)*;
-  dtext = 0x21..0x5a | 0x5e..0x7e | obs_dtext | UTF8_non_ascii;
+  dtext = 0x21..0x5a | 0x5e..0x7e | UTF8_non_ascii | obs_dtext;
   dot_atom = CFWS? dot_atom_text (CFWS? >(comment_after_address,1));
   domain_literal = CFWS? "[" (FWS? dtext)* FWS? "]" CFWS?;
   obs_domain = atom ("." atom)*;
@@ -92,26 +88,22 @@
   # after an addr_spec could cause it to be interpreted as a
   # display name: "bar@example.com ,..."
 
-  addr_spec_in_angle_brackets =
-    (local_part "@" domain) %(end_addr,1) |
-    local_part_no_capture   %(end_addr,0);
-
-  addr_spec_no_angle_brackets =
+  addr_spec =
     (local_part "@" domain) %(end_addr,1) |
     local_part              %(end_addr,0);
 
   # angle_addr:
   obs_domain_list = (CFWS | ",")* "@" domain ("," CFWS? ("@" domain)?)*;
   obs_route = (obs_domain_list ":") >obs_domain_list_s %obs_domain_list_e;
-  obs_angle_addr = CFWS? "<" obs_route? addr_spec_in_angle_brackets ">" CFWS?;
+  obs_angle_addr = CFWS? "<" obs_route? addr_spec ">" CFWS?;
 
-  angle_addr = CFWS? ("<" >angle_addr_s) addr_spec_in_angle_brackets ">" CFWS? |
+  angle_addr = CFWS? ("<" >angle_addr_s) addr_spec ">" CFWS? |
                 obs_angle_addr;
 
   # Address
   display_name = phrase;
-  name_addr = display_name? %(end_addr,2) angle_addr;
-  mailbox = (name_addr | addr_spec_no_angle_brackets) >address_s %address_e;
+  name_addr = display_name? %(end_addr,2) angle_addr angle_addr?;
+  mailbox = (name_addr | addr_spec) >address_s %address_e;
   obs_mbox_list = (CFWS? ",")* mailbox ("," (mailbox | CFWS)?)*;
   mailbox_list = (mailbox (("," | ";") mailbox)*) | obs_mbox_list;
   obs_group_list = (CFWS? ",")+ CFWS?;
@@ -125,19 +117,22 @@
 
   # message_ids
   obs_id_left = local_part;
-  id_left = dot_atom_text | obs_id_left;
   # id_right modifications to support multiple '@' in msg_id.
   msg_id_atext = ALPHA | DIGIT | "!" | "#" | "$" | "%" | "&" | "'" | "*" |
                  "+" | "-" | "/" | "=" | "?" | "^" | "_" | "`" | "{" | "|" |
-                 "}" | "~" | "@" | 0xa0..0xff | UTF8_non_ascii;
-  msg_id_dot_atom_text = (msg_id_atext+ "."?)+;
+                 "}" | "~" | ":" | "," | "." | " " | UTF8_non_ascii;
   obs_id_right = domain;
   no_fold_literal = "[" (dtext)* "]";
-  id_right = msg_id_dot_atom_text | no_fold_literal | obs_id_right;
+  id_left = msg_id_atext+ | obs_id_left;
+  id_right = ( msg_id_atext | "@" )+ | no_fold_literal | obs_id_right;
   msg_id = (CFWS)?
-           (("<" id_left "@" id_right ">") >msg_id_s %msg_id_e)
+           ( (("<" id_left "@" id_right ">") >msg_id_s %msg_id_e) | 
+             (("<" id_left ">") >msg_id_s %msg_id_e) | 
+             ((id_left "@" id_right) >msg_id_s %msg_id_e) )
            (CFWS)?;
   message_ids = msg_id (CFWS? msg_id)*;
+
+  in_reply_to = message_ids** any*;
 
   include date_time "date_time.rl";
   date_time = (day_of_week ",")?
@@ -145,16 +140,17 @@
 
   # Added CFWS? to increase robustness
   # (qmail likes to include a comment style string...?)
-  received_token = word | angle_addr | addr_spec_no_angle_brackets | domain;
-  received = ((CFWS? received_token*) >received_tokens_s %received_tokens_e)
-              ";" date_time;
+  received_token = word | angle_addr | addr_spec | domain;
+  received = ((CFWS? (received_token [,:]?)* ) >received_tokens_s %received_tokens_e)
+              ( ";" date_time? ((CFWS? (received_token [,:]?)* ) ) >received_tokens_s %received_tokens_e )*;
 
   # RFC2045: mime_version, content_type, content_transfer_encoding
   mime_version = CFWS?
             (DIGIT+ >major_digits_s %major_digits_e)
             comment? "." comment?
             (DIGIT+ >minor_digits_s %minor_digits_e)
-            CFWS?;
+            CFWS? 
+            ( ";"? word+ )?;
 
   token = 0x21..0x27 | 0x2a..0x2b | 0x2c..0x2e |
           0x30..0x39 | 0x41..0x5a | 0x5e..0x7e;
@@ -186,7 +182,7 @@
 
   # Envelope From
   ctime_date = day_name " "+ month " "+ day " " time_of_day " " year;
-  envelope_from = (addr_spec_no_angle_brackets) >address_s %address_e " "
+  envelope_from = (addr_spec) >address_s %address_e " "
                   (ctime_date >ctime_date_s %ctime_date_e);
 
   # content_location

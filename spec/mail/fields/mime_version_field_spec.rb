@@ -161,6 +161,11 @@ describe Mail::MimeVersionField do
       t.decoded.should eq '1.0'
     end
 
+    it "should handle extra atoms" do
+      t = Mail::MimeVersionField.new( "1.0; Windows-1252")
+      t.decoded.should == '1.0'
+    end
+
   end
 
 end

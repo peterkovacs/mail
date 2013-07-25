@@ -1,5 +1,5 @@
 %%{
-  machine content_location;
+  machine in_reply_to;
 
   include rb_actions "rb_actions.rl";
   include common "../../common.rl";
@@ -7,13 +7,13 @@
   getkey data.at(p);
   alphtype int;
 
-  main := content_location;
+  main := in_reply_to;
 }%%
 
 module Mail
   module Parsers
     module Ragel
-      module ContentLocationMachine
+      module InReplyToMachine
         %%write data;
 
         def self.parse(data)

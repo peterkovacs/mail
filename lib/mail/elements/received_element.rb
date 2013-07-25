@@ -6,8 +6,10 @@ module Mail
     
     def initialize( string )
       received = Mail::Parsers::ReceivedParser.new.parse(string)
-      @date_time = ::DateTime.parse("#{received.date} #{received.time}")
-      @info = received.info
+      if received.date && received.time
+        @date_time = ::DateTime.parse("#{received.date} #{received.time}")
+      end
+      @info = received.info.join( ' ' )
     end
     
     def date_time
