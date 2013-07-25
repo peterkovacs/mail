@@ -130,7 +130,7 @@
              (("<" id_left ">") >msg_id_s %msg_id_e) | 
              ((id_left "@" id_right) >msg_id_s %msg_id_e) )
            (CFWS)?;
-  message_ids = msg_id (CFWS? msg_id)*;
+  message_ids = msg_id (( CFWS? "," CFWS?)? msg_id)*;
 
   in_reply_to = message_ids** any*;
 
