@@ -759,6 +759,34 @@ describe Mail::Address do
                                          :raw          => '"" <local@example.com>' 
         })
       end
+
+      it "should handle |\"Name\" <>|" do
+        address = Mail::Address.new( "\"Name\" <>")
+        address.should break_down_to({ 
+                                         :name         => 'Name',
+                                         :display_name => 'Name',
+                                         :address      => nil,
+                                         :comments     => nil,
+                                         :domain       => nil,
+                                         :local        => nil,
+                                         :format       => 'Name <>',
+                                         :raw          => '"Name" <>' 
+        })
+      end
+
+      it "should handle |<;>|" do
+        address = Mail::Address.new( "<;>")
+        address.should break_down_to({ 
+                                         :name         => nil,
+                                         :display_name => nil,
+                                         :address      => nil,
+                                         :comments     => nil,
+                                         :domain       => nil,
+                                         :local        => nil,
+                                         :format       => '<;>',
+                                         :raw          => '<;>' 
+        })
+      end
     end
 
   end
