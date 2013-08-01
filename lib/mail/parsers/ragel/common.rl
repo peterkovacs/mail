@@ -128,8 +128,8 @@
   id_left = msg_id_atext+ | obs_id_left;
   id_right = ( msg_id_atext | "@" )+ | no_fold_literal | obs_id_right;
   msg_id = (CFWS)?
-           ( (("<" id_left "@" id_right ">") >msg_id_s %msg_id_e) | 
-             (("<" id_left "@" id_right "...") >msg_id_s %msg_id_e) | 
+           ( (("<" id_left "@" id_right? ">") >msg_id_s %msg_id_e) | 
+             (("<" id_left "@" id_right? "...") >msg_id_s %msg_id_e) | 
              (("<" id_left ">") >msg_id_s %msg_id_e) | 
              (("<" id_left "..." ) >msg_id_s %msg_id_e) | 
              ((id_left "@" id_right) >msg_id_s %msg_id_e) )

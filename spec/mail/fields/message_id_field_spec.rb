@@ -189,5 +189,10 @@ describe Mail::MessageIdField do
       m = Mail::MessageIdField.new( '<4769770500E92399@n064.sc1.he.tucows.com> (added by postmaster@bouncemessage.net)' )
       m.message_id.should eq '<4769770500E92399@n064.sc1.he.tucows.com>'
     end
+
+    it "should be able to parse |<20081016131801.29481.qmail@>|" do
+      m = Mail::MessageIdField.new( '<20081016131801.29481.qmail@>' )
+      m.message_id.should eq '<20081016131801.29481.qmail@>'
+    end
   end
 end
