@@ -43,6 +43,18 @@ module Mail
       self.parse
       self
     end
+
+    def element
+      @element ||= Mail::InReplyToElement.new(value) unless value.blank?
+    end
+
+    def parse(val = value)
+      unless val.blank?
+        @element = Mail::InReplyToElement.new(val)
+      else
+        nil
+      end
+    end
     
     def encoded
       do_encode(CAPITALIZED_FIELD)

@@ -53,5 +53,11 @@ describe Mail::ReturnPathField do
     mail.encoded.should =~ /<bounce@someemail\.com>/
   end
   
+  # This is widely seen in the wild, probably from some overzealous mailer wrapping the return-path in <>.
+  it "should accept <angle_addr>" do
+    rp = Mail::ReturnPathField.new( '<First Last <local@domain.com>>' )
+    rp.address.should eq 'local@domain.com'
+    rp.encoded.should eq "Return-Path: <local@domain.com>\r\n"
+  end
   
 end

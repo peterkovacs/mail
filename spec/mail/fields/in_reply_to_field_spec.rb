@@ -96,5 +96,10 @@ describe Mail::InReplyToField do
       t.name.should eq 'In-Reply-To'
       t.message_ids.should eq ['<20010307181747.A1531@socrate>']
     end
+
+    it 'should be able to parse <"urn:correios:msg:2011071303483114f523ef89e040878bca2e451a999448"@1310528911569.rte-svc-na-5006.iad5.amazon.com>' do
+      m = Mail::InReplyToField.new( '<"urn:correios:msg:2011071303483114f523ef89e040878bca2e451a999448"@1310528911569.rte-svc-na-5006.iad5.amazon.com>' )
+      m.message_ids.should eq ['<"urn:correios:msg:2011071303483114f523ef89e040878bca2e451a999448"@1310528911569.rte-svc-na-5006.iad5.amazon.com>']
+    end
   end
 end

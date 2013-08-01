@@ -7,6 +7,7 @@ module Mail
   register_autoload :ContentTypeElement, 'mail/elements/content_type_element'
   register_autoload :DateTimeElement, 'mail/elements/date_time_element'
   register_autoload :EnvelopeFromElement, 'mail/elements/envelope_from_element'
+  register_autoload :InReplyToElement, 'mail/elements/in_reply_to_element'
   register_autoload :MessageIdsElement, 'mail/elements/message_ids_element'
   register_autoload :MimeVersionElement, 'mail/elements/mime_version_element'
   register_autoload :PhraseList, 'mail/elements/phrase_list'

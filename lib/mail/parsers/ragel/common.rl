@@ -103,7 +103,8 @@
   # Address
   display_name = phrase;
   name_addr = display_name? %(end_addr,2) angle_addr angle_addr?;
-  mailbox = (name_addr | addr_spec) >address_s %address_e;
+  angle_name_addr = CFWS? ( "<" name_addr ">" ) CFWS?;
+  mailbox = (name_addr | angle_name_addr | addr_spec) >address_s %address_e;
   obs_mbox_list = (CFWS? ",")* mailbox ("," (mailbox | CFWS)?)*;
   mailbox_list = (mailbox (("," | ";") mailbox)*) | obs_mbox_list;
   obs_group_list = (CFWS? ",")+ CFWS?;
