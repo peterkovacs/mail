@@ -787,6 +787,21 @@ describe Mail::Address do
                                          :raw          => '<;>' 
         })
       end
+
+      it "should handle |<Undisclosed-Recipient:;>|" do
+        address = Mail::Address.new( "<Undisclosed-Recipient:;>")
+        address.to_s.should eq ''
+      end
+
+      it "should handle |Undisclosed-Recipient:;|" do
+        address = Mail::Address.new( "Undisclosed-Recipient:;")
+        address.to_s.should eq ''
+      end
+
+      it "should handle |Undisclosed Recipient:;|" do
+        address = Mail::Address.new( "Undisclosed Recipient:;")
+        address.to_s.should eq ''
+      end
     end
 
   end

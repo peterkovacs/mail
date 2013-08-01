@@ -105,14 +105,19 @@
   name_addr = display_name? %(end_addr,2) angle_addr angle_addr?;
   name_blank_addr = display_name? %(end_addr,2) CFWS? "<" CFWS? ";"? CFWS? ">" CFWS?;
   angle_name_addr = CFWS? ( "<" name_addr ">" ) CFWS?;
-  mailbox = (name_addr | name_blank_addr | angle_name_addr | addr_spec) >address_s %address_e;
+  angle_empty_group = 
+    "<" CFWS? ( display_name >group_name_s %group_name_e ) ":" CFWS? ";" CFWS? ">";
+  mailbox = ( name_addr | 
+              name_blank_addr | 
+              angle_name_addr | 
+              addr_spec ) >address_s %address_e ; 
   obs_mbox_list = (CFWS? ",")* mailbox ("," (mailbox | CFWS)?)*;
   mailbox_list = (mailbox (("," | ";") mailbox)*) | obs_mbox_list;
   obs_group_list = (CFWS? ",")+ CFWS?;
   group_list = mailbox_list | CFWS | obs_group_list;
   group = (display_name >group_name_s %group_name_e) ":"
             (group_list?) ";" CFWS?;
-  address = group | mailbox;
+  address = group | mailbox | angle_empty_group ;
   #obs_addr_list = (CFWS? ",")* address ("," (address | CFWS)?)*;
   address_lists = address? %(comment_after_address,0)
                   (FWS* ("," | ";") FWS* address?)*;

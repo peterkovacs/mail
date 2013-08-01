@@ -123,10 +123,6 @@ module Mail::Parsers
         end
       end
 
-      if address_list.addresses.empty? && address_list.group_names.empty?
-        raise Mail::Field::ParseError.new(Mail::AddressList, s, "Didn't find any addresses or groups")
-      end
-
       address_list
     end
   end
