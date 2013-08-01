@@ -173,5 +173,10 @@ describe Mail::MessageIdField do
       m = Mail::MessageIdField.new( '<"urn:correios:msg:2011071303483114f523ef89e040878bca2e451a999448"@1310528911569.rte-svc-na-5006.iad5.amazon.com>' )
       m.message_id.should eq '<"urn:correios:msg:2011071303483114f523ef89e040878bca2e451a999448"@1310528911569.rte-svc-na-5006.iad5.amazon.com>'
     end
+
+    it 'should be able to parse <7467BC5DC7CCEB429E2D3F05E49B3067375E6DC038@EXVMBX020-10.exch020.server...' do
+      m = Mail::MessageIdField.new( '<7467BC5DC7CCEB429E2D3F05E49B3067375E6DC038@EXVMBX020-10.exch020.server...' )
+      m.message_id.should eq '<7467BC5DC7CCEB429E2D3F05E49B3067375E6DC038@EXVMBX020-10.exch020.server...'
+    end
   end
 end
