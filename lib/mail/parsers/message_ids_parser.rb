@@ -29,7 +29,8 @@ module Mail::Parsers
           :local_dot_atom_pre_comment_s,
           :local_dot_atom_s,
           :qstr_s, :qstr_e,
-          :local_quoted_string_e
+          :local_quoted_string_e,
+          :comment_s, :comment_e
 
           # ignored actions
 

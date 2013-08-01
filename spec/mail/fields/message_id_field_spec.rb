@@ -178,5 +178,16 @@ describe Mail::MessageIdField do
       m = Mail::MessageIdField.new( '<7467BC5DC7CCEB429E2D3F05E49B3067375E6DC038@EXVMBX020-10.exch020.server...' )
       m.message_id.should eq '<7467BC5DC7CCEB429E2D3F05E49B3067375E6DC038@EXVMBX020-10.exch020.server...'
     end
+
+    it 'should be able to parse 2a26f8f146e27159' do
+      pending "Introduces lots of null message-ids."
+      m = Mail::MessageIdField.new( '2a26f8f146e27159' )
+      m.message_id.should eq '2a26f8f146e27159'
+    end
+
+    it "should be able to parse |<4769770500E92399@n064.sc1.he.tucows.com> (added by postmaster@bouncemessage.net)|" do
+      m = Mail::MessageIdField.new( '<4769770500E92399@n064.sc1.he.tucows.com> (added by postmaster@bouncemessage.net)' )
+      m.message_id.should eq '<4769770500E92399@n064.sc1.he.tucows.com>'
+    end
   end
 end
