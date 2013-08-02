@@ -806,6 +806,10 @@ describe Mail::Encodings do
     it "should ignore nil in arrays" do
       Mail::Encodings.address_encode(["aa@bb.com", nil], 'utf-8').should eq "aa@bb.com"
     end
+
+    it "should handle malformed strings" do
+      lambda { Mail::Encodings.value_decode( "?==?WINDOWS-1252?Q?Abundance?=" ) }.should_not raise_error
+    end
   end
 
 end

@@ -224,4 +224,5 @@ describe "mail encoding" do
       m.subject.should eq "Hello   World"
     end
   end
+
 end
