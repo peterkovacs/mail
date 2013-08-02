@@ -154,10 +154,8 @@ describe "Test emails" do
     # can be long.
     it "should handle the RFC trace example email" do
       mail = Mail.read(fixture('emails', 'rfc2822', 'example09.eml'))
-      mail.received[0].info.should eq 'from x.y.test by example.net via TCP with ESMTP id ABC12345 for <mary@example.net>'
-      mail.received[0].date_time.should eq ::DateTime.parse('21 Nov 1997 10:05:43 -0600')
-      mail.received[1].info.should eq 'from machine.example by x.y.test'
-      mail.received[1].date_time.should eq ::DateTime.parse('21 Nov 1997 10:01:22 -0600')
+      mail.received[0].to_s.should eq 'from x.y.test by example.net via TCP with ESMTP id ABC12345 for <mary@example.net>; 21 Nov 1997 10:05:43 -0600'
+      mail.received[1].to_s.should eq 'from machine.example by x.y.test; 21 Nov 1997 10:01:22 -0600'
       mail.from.should eq ['jdoe@machine.example']
       mail.to.should eq ['mary@example.net']
       mail.subject.should eq 'Saying Hello'

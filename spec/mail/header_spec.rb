@@ -540,10 +540,10 @@ TRACEHEADER
       @traced_header['To'] = "Mikel"
       @traced_header['Received'] = "from agw2 by xxx.xxxx.xxx; Sun, 8 May 2005 12:30:13 -0500"
       @traced_header.fields[0].addresses.should eq ['xxx@xxxx.xxxtest']
-      @traced_header.fields[1].info.should eq 'from xxx.xxxx.xxx by xxx.xxxx.xxx with ESMTP id 6AAEE3B4D23 for <xxx@xxxx.xxx>'
-      @traced_header.fields[2].info.should eq 'from xxx.xxxx.xxx by xxx.xxxx.xxx with ESMTP id j48HUC213279 for <xxx@xxxx.xxx>'
-      @traced_header.fields[3].info.should eq 'from conversion-xxx.xxxx.xxx.net by xxx.xxxx.xxx id <0IG600901LQ64I@xxx.xxxx.xxx> for <xxx@xxxx.xxx>'
-      @traced_header.fields[5].info.should eq "from agw2 by xxx.xxxx.xxx"
+      @traced_header.fields[1].to_s.should eq 'from xxx.xxxx.xxx by xxx.xxxx.xxx with ESMTP id 6AAEE3B4D23 for <xxx@xxxx.xxx>; Sun, 8 May 2005 12:30:23 -0500'
+      @traced_header.fields[2].to_s.should eq 'from xxx.xxxx.xxx by xxx.xxxx.xxx with ESMTP id j48HUC213279 for <xxx@xxxx.xxx>; Sun, 8 May 2005 12:30:13 -0500'
+      @traced_header.fields[3].to_s.should eq 'from conversion-xxx.xxxx.xxx.net by xxx.xxxx.xxx id <0IG600901LQ64I@xxx.xxxx.xxx> for <xxx@xxxx.xxx>; Sun, 8 May 2005 12:30:12 -0500'
+      @traced_header.fields[5].to_s.should eq "from agw2 by xxx.xxxx.xxx; Sun, 8 May 2005 12:30:13 -0500"
       @traced_header.fields[6].field.class.should eq Mail::ToField
     end
     

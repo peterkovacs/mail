@@ -20,62 +20,16 @@
 #                          atom / domain / msg-id
 # 
 module Mail
-  class ReceivedField < StructuredField
+  class ReceivedField < UnstructuredField
     
     FIELD_NAME = 'received'
     CAPITALIZED_FIELD = 'Received'
     
     def initialize(value = nil, charset = 'utf-8')
-      self.charset = charset
-      super(CAPITALIZED_FIELD, strip_field(FIELD_NAME, value), charset)
+      @charset = charset
+      super(CAPITALIZED_FIELD, strip_field(FIELD_NAME, value))
       self.parse
       self
-
     end
-    
-    def parse(val = value)
-      unless val.blank?
-        @element = Mail::ReceivedElement.new(val)
-      end
-    end
-    
-    def element
-      @element ||= Mail::ReceivedElement.new(value)
-    end
-    
-    def date_time
-      @datetime ||= ::DateTime.parse("#{element.date_time}") if element.date_time
-    end
-
-    def info
-      element.info
-    end
-   
-    def formatted_date
-      if date_time
-        date_time.strftime("%a, %d %b %Y %H:%M:%S ") + date_time.zone.delete(':')
-      end
-    end
- 
-    def encoded
-      if value.blank?
-        "#{CAPITALIZED_FIELD}: \r\n"
-      elsif date = formatted_date
-        "#{CAPITALIZED_FIELD}: #{info}; #{formatted_date}\r\n"
-      else
-        "#{CAPITALIZED_FIELD}: #{info}\r\n"
-      end
-    end
-    
-    def decoded
-      if value.blank?
-        ""
-      elsif date = formatted_date
-        "#{info}; #{date}" 
-      else
-        info
-      end
-    end
-    
   end
 end
