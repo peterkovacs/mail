@@ -119,25 +119,23 @@ module Mail
       lines = collapse_adjacent_encodings(str)
 
       # Split on white-space boundaries with capture, so we capture the white-space as well
-      lines.map do |line|
-        line.split(/([ \t])/).map do |text|
-          if text.index('=?').nil?
-            text
-          else
-            # Search for occurences of quoted strings or plain strings
-            text.scan(/(                                 # Group around entire regex to include it in matches
-                        \=\?[^?]+\?([QB])\?[^?]+?\?\=    # Quoted String with subgroup for encoding method
-                        |                                # or
-                        .+?(?=\=\?|$)                    # Plain String
-                      )/xmi).map do |matches|
-              string, method = *matches
-              if    method == 'b' || method == 'B'
-                b_value_decode(string)
-              elsif method == 'q' || method == 'Q'
-                q_value_decode(string)
-              else
-                string
-              end
+      lines.map do |text|
+        if text.index('=?').nil?
+          text
+        else
+          # Search for occurences of quoted strings or plain strings
+          text.scan(/(                                 # Group around entire regex to include it in matches
+                      \=\?[^?]+\?([QB])\?[^?]+?\?\=    # Quoted String with subgroup for encoding method
+                      |                                # or
+                      .+?(?=\=\?|$)                    # Plain String
+                    )/xmi).map do |matches|
+            string, method = *matches
+            if    method == 'b' || method == 'B'
+              b_value_decode(string)
+            elsif method == 'q' || method == 'Q'
+              q_value_decode(string)
+            else
+              string
             end
           end
         end
