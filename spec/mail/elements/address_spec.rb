@@ -802,6 +802,20 @@ describe Mail::Address do
         address = Mail::Address.new( "Undisclosed Recipient:;")
         address.to_s.should eq ''
       end
+
+      it "should handle |andyveazey@(337)234-5310|" do
+        address = Mail::Address.new( "andyveazey@(337)234-5310")
+        address.should break_down_to({ 
+                                         :name         => '337',
+                                         :display_name => nil,
+                                         :address      => 'andyveazey',
+                                         :comments     => ['337'],
+                                         :domain       => nil,
+                                         :local        => 'andyveazey',
+                                         :format       => 'andyveazey (337)',
+                                         :raw          => 'andyveazey@(337)234-5310' 
+        })
+      end
     end
 
   end

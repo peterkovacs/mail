@@ -103,7 +103,7 @@ module Mail::Parsers
         when :domain_s
           domain_s = p
         when :domain_e
-          address.domain = s[domain_s..(p-1)].rstrip if address
+          address.domain = s[domain_s..(p-1)].rstrip if address && domain_s
 
         # Local
         when :local_dot_atom_s then local_dot_atom_s = p

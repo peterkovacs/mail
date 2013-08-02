@@ -66,7 +66,17 @@ module Mail
       if match
         encoding = match[1]
         str = Ruby18.decode_base64(match[2])
-        str = Iconv.conv('UTF-8//IGNORE', fix_encoding(encoding), str)
+        str = begin
+          Iconv.conv('UTF-8//IGNORE', fix_encoding(encoding), str)
+        rescue Iconv::IllegalSequence, Iconv::InvalidEncoding, Errno::EINVAL
+          # the 'from' parameter specifies a charset other than what the text
+          # actually is...not much we can do in this case but just return the
+          # unconverted text.
+          #
+          # Ditto if either parameter represents an unknown charset, like
+          # X-UNKNOWN.
+          str
+        end
       end
       str
     end
@@ -86,7 +96,17 @@ module Mail
         # Remove trailing = if it exists in a Q encoding
         string = string.sub(/\=$/, '')
         str = Encodings::QuotedPrintable.decode(string)
-        str = Iconv.conv('UTF-8//IGNORE', fix_encoding(encoding), str)
+        str = begin
+          Iconv.conv('UTF-8//IGNORE', fix_encoding(encoding), str)
+        rescue Iconv::IllegalSequence, Iconv::InvalidEncoding, Errno::EINVAL
+          # the 'from' parameter specifies a charset other than what the text
+          # actually is...not much we can do in this case but just return the
+          # unconverted text.
+          #
+          # Ditto if either parameter represents an unknown charset, like
+          # X-UNKNOWN.
+          str
+        end
       end
       str
     end
