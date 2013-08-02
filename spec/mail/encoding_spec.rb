@@ -195,7 +195,7 @@ describe "mail encoding" do
     end
   end
 
-  it "should handle invalid encodings" do
+  it "should handle quoted-printable invalid encodings" do
     m = Mail.new
     m['Subject'] = Mail::SubjectField.new("=?UNKNOWN?Q?Hello_=20_World?=")
     if RUBY_VERSION > '1.9'
@@ -205,7 +205,17 @@ describe "mail encoding" do
     end
   end
 
-  it "should handle invalid encodings" do
+  it "should handle invalid characters" do
+    m = Mail.new
+    m['Subject'] = Mail::SubjectField.new("=?UNKNOWN?Q?Hello_=c3_World?=")
+    if RUBY_VERSION > '1.9'
+      lambda { m.subject.should be_valid_encoding }.should_not raise_error
+    else
+      m.subject.should eq "Hello \303 World"
+    end
+  end
+
+  it "should handle base64 invalid encodings" do
     m = Mail.new
     m['Subject'] = Mail::SubjectField.new("=?UNKNOWN?B?SGVsbG8gICBXb3JsZA==?=")
     if RUBY_VERSION > '1.9'

@@ -158,7 +158,7 @@ module Mail
             require 'iconv'
             Iconv.iconv(to_encoding, 'UTF-8', output).first
           end
-        rescue Iconv::IllegalSequence, Iconv::InvalidEncoding, Errno::EINVAL
+        rescue Iconv::IllegalSequence, Iconv::InvalidEncoding, Iconv::InvalidCharacter, Errno::EINVAL
           # the 'from' parameter specifies a charset other than what the text
           # actually is...not much we can do in this case but just return the
           # unconverted text.

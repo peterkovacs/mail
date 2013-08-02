@@ -68,7 +68,7 @@ module Mail
         str = Ruby18.decode_base64(match[2])
         str = begin
           Iconv.conv('UTF-8//IGNORE', fix_encoding(encoding), str)
-        rescue Iconv::IllegalSequence, Iconv::InvalidEncoding, Errno::EINVAL
+        rescue Iconv::IllegalSequence, Iconv::InvalidEncoding, Iconv::InvalidCharacter, Errno::EINVAL
           # the 'from' parameter specifies a charset other than what the text
           # actually is...not much we can do in this case but just return the
           # unconverted text.
@@ -98,7 +98,7 @@ module Mail
         str = Encodings::QuotedPrintable.decode(string)
         str = begin
           Iconv.conv('UTF-8//IGNORE', fix_encoding(encoding), str)
-        rescue Iconv::IllegalSequence, Iconv::InvalidEncoding, Errno::EINVAL
+        rescue Iconv::IllegalSequence, Iconv::InvalidEncoding, Iconv::InvalidCharacter, Errno::EINVAL
           # the 'from' parameter specifies a charset other than what the text
           # actually is...not much we can do in this case but just return the
           # unconverted text.
