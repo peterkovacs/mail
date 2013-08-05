@@ -67,4 +67,14 @@ describe Mail::ReferencesField do
     t.to_s.should eq '<1234@test.lindsaar.net> <5678@test.lindsaar.net>'
   end
 
+  it 'should be able to parse |2a26f8f146e27159@domain.com@domain.com, 2a26f8f146e27159@domain.com@domain.com|' do
+    m = Mail::ReferencesField.new( '2a26f8f146e27159@domain.com@domain.com, 4769770500E92399@n064.sc1.he.tucows.com' )
+    m.message_ids.should eq [ '2a26f8f146e27159@domain.com@domain.com', '4769770500E92399@n064.sc1.he.tucows.com' ]
+  end
+
+  it 'should be able to parse |2a26f8f146e27159@domain.com@domain.com 2a26f8f146e27159@domain.com@domain.com|' do
+    m = Mail::ReferencesField.new( '2a26f8f146e27159@domain.com@domain.com 4769770500E92399@n064.sc1.he.tucows.com' )
+    m.message_ids.should eq [ '2a26f8f146e27159@domain.com@domain.com', '4769770500E92399@n064.sc1.he.tucows.com' ]
+  end
+
 end

@@ -132,14 +132,16 @@
   no_fold_literal = "[" (dtext)* "]";
   id_left = msg_id_atext+ | obs_id_left;
   id_right = ( msg_id_atext | "@" )+ | no_fold_literal | obs_id_right;
+  id_left_ns = ( msg_id_atext - ( " " | "," ) )+ | no_fold_literal;
+  id_right_ns = ( msg_id_atext - ( " " | "," ) | "@" )+ | no_fold_literal;
   msg_id = (CFWS)?
            ( (("<" id_left "@" id_right? ">") >msg_id_s %msg_id_e) | 
-             (("<" id_left "@" id_right? "...") >msg_id_s %msg_id_e) | 
+             (("<" id_left "@" id_right? :>> "...") >msg_id_s %msg_id_e) | 
              (("<" id_left ">") >msg_id_s %msg_id_e) | 
-             (("<" id_left "..." ) >msg_id_s %msg_id_e) | 
-             ((id_left "@" id_right) >msg_id_s %msg_id_e) )
-           (CFWS)?;
-  message_ids = msg_id (( CFWS? "," CFWS?)? msg_id)*;
+             (("<" id_left :>> "..." ) >msg_id_s %msg_id_e) | 
+             ((id_left_ns ("@" id_right_ns)? ) >msg_id_s %msg_id_e ) )
+           (CFWS)? <: ","? ;
+  message_ids = msg_id**;
 
   in_reply_to = message_ids** any*;
 
