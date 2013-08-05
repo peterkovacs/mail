@@ -166,6 +166,10 @@ describe Mail::MimeVersionField do
       t.decoded.should == '1.0'
     end
 
+    it "should handle quoted strings" do
+      t = Mail::MimeVersionField.new( "1.0 boundary=\"quoted string\"")
+      t.decoded.should == '1.0'
+    end
   end
 
 end

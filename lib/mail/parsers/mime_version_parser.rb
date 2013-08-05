@@ -31,7 +31,9 @@ module Mail::Parsers
         when :minor_digits_e
           mime_version.minor = s[minor_digits_s..(p-1)]
 
-        when :comment_e, :comment_s then nil
+        when :comment_e, :comment_s,
+             :qstr_s, :qstr_e 
+          nil
 
         else
           raise Mail::Field::ParseError.new(Mail::MimeVersionElement, s, "Failed to process unknown action: #{action}")
