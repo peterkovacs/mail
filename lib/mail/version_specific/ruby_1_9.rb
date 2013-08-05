@@ -57,6 +57,8 @@ module Mail
       end
       decoded = str.encode("utf-8", :invalid => :replace, :replace => "")
       decoded.valid_encoding? ? decoded : decoded.encode("utf-16le", :invalid => :replace, :replace => "").encode("utf-8")
+    rescue Encoding::UndefinedConversionError
+      str.dup.force_encoding(Encoding::ASCII_8BIT)
     end
 
     def Ruby19.q_value_encode(str, encoding = nil)
@@ -77,7 +79,7 @@ module Mail
       decoded = str.encode("utf-8", :invalid => :replace, :replace => "")
       decoded.valid_encoding? ? decoded : decoded.encode("utf-16le", :invalid => :replace, :replace => "").encode("utf-8")
     rescue Encoding::UndefinedConversionError
-      str.dup.force_encoding("utf-8")
+      str.dup.force_encoding(Encoding::ASCII_8BIT)
     end
 
     def Ruby19.param_decode(str, encoding)
@@ -137,7 +139,7 @@ module Mail
         Encoding::GB18030
 
       else
-        charset
+        Encoding.find( charset ) rescue raise Encoding::UndefinedConversionError
       end
     end
   end

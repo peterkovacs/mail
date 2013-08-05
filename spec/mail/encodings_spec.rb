@@ -169,7 +169,7 @@ describe Mail::Encodings do
     if '1.9'.respond_to?(:force_encoding)
       it "should decode 8bit encoded string" do
         string = "=?8bit?Q?ALPH=C3=89E?="
-        result = "ALPH\xC3\x89E"
+        result = "ALPH\xC3\x89E".force_encoding( 'ASCII-8BIT')
         Mail::Encodings.value_decode(string).should == result
       end
 

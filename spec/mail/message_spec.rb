@@ -528,7 +528,7 @@ describe Mail::Message do
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
         message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
-        message.keywords.should      eq ["test", "of the new mail", "system"]
+        message.keywords.should      eq 'test, "of the new mail", system'
         message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.to_s.should      eq 'from machine.example by x.y.test; 12 Aug 2009 00:00:02 GMT'
         message.references.should    eq '<1234@references.lindsaar.net>'
@@ -589,7 +589,7 @@ describe Mail::Message do
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
         message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
-        message.keywords.should      eq ["test", "of the new mail", "system"]
+        message.keywords.should      eq 'test, "of the new mail", system'
         message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.to_s.should      eq 'from machine.example by x.y.test; 12 Aug 2009 00:00:02 GMT'
         message.references.should    eq '<1234@references.lindsaar.net>'
@@ -650,7 +650,7 @@ describe Mail::Message do
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
         message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
-        message.keywords.should      eq ["test", "of the new mail", "system"]
+        message.keywords.should      eq 'test, "of the new mail", system'
         message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.to_s.should      eq 'from machine.example by x.y.test; 12 Aug 2009 00:00:02 GMT'
         message.references.should    eq '<1234@references.lindsaar.net>'
@@ -711,7 +711,7 @@ describe Mail::Message do
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
         message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
-        message.keywords.should      eq ["test", "of the new mail", "system"]
+        message.keywords.should      eq 'test, "of the new mail", system'
         message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.to_s.should      eq 'from machine.example by x.y.test; 12 Aug 2009 00:00:02 GMT'
         message.references.should    eq '<1234@references.lindsaar.net>'
@@ -773,7 +773,7 @@ describe Mail::Message do
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
         message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
-        message.keywords.should      eq ["test", "of the new mail", "system"]
+        message.keywords.should      eq 'test, "of the new mail", system'
         message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.to_s.should      eq 'from machine.example by x.y.test; 12 Aug 2009 00:00:02 GMT'
         message.references.should    eq '<1234@references.lindsaar.net>'
@@ -835,7 +835,7 @@ describe Mail::Message do
         message.date.should          eq DateTime.parse('12 Aug 2009 00:00:01 GMT')
         message.from.should          eq ['mikel@from.lindsaar.net']
         message.in_reply_to.should   eq '<1234@in_reply_to.lindsaar.net>'
-        message.keywords.should      eq ["test", "of the new mail", "system"]
+        message.keywords.should      eq 'test, "of the new mail", system'
         message.message_id.should    eq '<1234@message_id.lindsaar.net>'
         message.received.to_s.should      eq 'from machine.example by x.y.test; 12 Aug 2009 00:00:02 GMT'
         message.references.should    eq '<1234@references.lindsaar.net>'
