@@ -123,6 +123,11 @@ describe "MIME Emails" do
         mail.attachments['test.png'] = "2938492384923849"
         mail.boundary.should be_nil
       end
+
+      it "should handle parts with no content-type" do
+        mail = Mail.new( "Content-Type: multipart/mixed; boundary=\"=====>>MDAS 1375560968<<=====\"\r\n\r\n--=====>>MDAS 1375560968<<=====\r\nContent-Length: 69\r\n\r\nThis message could not be fully transcribed due to size limitations.\r\n\r\n--=====>>MDAS 1375560968<<=====--\r\n--=====>>MDAS 1375560968<<=====\r\nContent-Length: 69\r\n\r\nThis message could not be fully transcribed due to size limitations.\r\n\r\n--=====>>MDAS 1375560968<<=====--\r\n" )
+        lambda { mail.encoded }.should_not raise_exception
+      end
     end
 
     describe "multipart/alternative emails" do
