@@ -26,27 +26,27 @@ describe Mail::KeywordsField do
   describe "giving a list of keywords" do
     it "should return a list of keywords" do
       k = Mail::KeywordsField.new('these are keywords, so there')
-      k.keywords.should eq ['these are keywords', 'so there']
+      k.to_s.should eq 'these are keywords, so there'
     end
     
     it "should handle phrases" do
       k = Mail::KeywordsField.new('"these, are keywords", so there')
-      k.keywords.should eq ['these, are keywords', 'so there']
+      k.to_s.should eq '"these, are keywords", so there'
     end
     
     it "should handle comments" do
       k = Mail::KeywordsField.new('"these, are keywords", so there (This is an irrelevant comment)')
-      k.keywords.should eq ['these, are keywords', 'so there (This is an irrelevant comment)']
+      k.to_s.should eq '"these, are keywords", so there (This is an irrelevant comment)'
     end
     
     it "should handle comments" do
       k = Mail::KeywordsField.new('"these, are keywords", so there (This is an irrelevant comment)')
-      k.keywords.should eq ['these, are keywords', 'so there (This is an irrelevant comment)']
+      k.to_s.should eq '"these, are keywords", so there (This is an irrelevant comment)'
     end
     
     it "should handle comments in quotes" do
       k = Mail::KeywordsField.new('"these, are keywords (another comment to be ignored)", so there (This is an irrelevant comment)')
-      k.keywords.should eq ['these, are keywords (another comment to be ignored)', 'so there (This is an irrelevant comment)']
+      k.to_s.should eq '"these, are keywords (another comment to be ignored)", so there (This is an irrelevant comment)'
     end
     
   end
@@ -54,7 +54,7 @@ describe Mail::KeywordsField do
   describe "encoding and decoding" do
     it "should encode" do
       k = Mail::KeywordsField.new('these are keywords, so there')
-      k.encoded.should eq "Keywords: these are keywords,\r\n so there\r\n"
+      k.encoded.should eq "Keywords: these are keywords, so there\r\n"
     end
 
     it "should decode" do
