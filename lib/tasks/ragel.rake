@@ -26,7 +26,7 @@ namespace :ragel do
     File.open(RB_ACTIONS,"w+") { |f| f.write actions_rl }
   end
 
-  RB_RAGEL_PARSERS = []
+  RB_RAGEL_PARSERS = [ ]
   Mail::Parsers::Ragel::FIELD_PARSERS.each do |p|
     path = "#{RB_GEN_DIR}/#{p}_machine.rb.rl"
     RB_RAGEL_PARSERS << path
@@ -43,13 +43,19 @@ namespace :ragel do
   RB_RAGEL_PARSERS.each do |ragel_path|
     path = ragel_path.gsub(".rl", "")
     RB_PARSERS << path
+    puts "#{path}"
     file path do
       puts "ragel -sR -F1 -o #{path} #{ragel_path}"
       `ragel -sR -F1 -o #{path} #{ragel_path}`
     end
   end
 
-  task :generate_ruby_parsers => RB_PARSERS
+  file "#{MAIL_ROOT}/lib/mail/parsers/ragel/uuencode.rb" do
+    puts "ragel -sR -F1 -o #{MAIL_ROOT}/lib/mail/parsers/ragel/uuencode.rb #{MAIL_ROOT}/lib/mail/parsers/ragel/uuencode.rb.rl"
+    `ragel -sR -F1 -o #{MAIL_ROOT}/lib/mail/parsers/ragel/uuencode.rb #{MAIL_ROOT}/lib/mail/parsers/ragel/uuencode.rb.rl`
+  end
+
+  task :generate_ruby_parsers => RB_PARSERS + [ "#{MAIL_ROOT}/lib/mail/parsers/ragel/uuencode.rb" ]
 
   desc "Generate ruby parsers from ragel files"
   task :generate => [:generate_ragel_files, :generate_ruby_parsers]

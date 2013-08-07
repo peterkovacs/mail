@@ -32,7 +32,6 @@ describe Mail::Encodings do
   end
 
   describe "quoted-printable Encoding" do
-
     it "should return true for quoted-printable" do
       Mail::Encodings.defined?('quoted-printable').should be_true
     end
@@ -810,6 +809,25 @@ describe Mail::Encodings do
     it "should handle malformed strings" do
       lambda { Mail::Encodings.value_decode( "?==?WINDOWS-1252?Q?Abundance?=" ) }.should_not raise_error
     end
+  end
+
+  describe "uuencode Encoding" do
+    it "should return true for uuencode" do
+      Mail::Encodings.defined?('uuencode').should be_true
+    end
+
+    it "should return true for :uuencode" do
+      Mail::Encodings.defined?(:uuencode).should be_true
+    end
+
+    it "should return the UUEncode Encoding class" do
+      Mail::Encodings.get_encoding('uuencode').should eq Mail::Encodings::UUEncode
+    end
+
+    it "should return the UUEncode Encoding class" do
+      Mail::Encodings.get_encoding(:uuencode).should eq Mail::Encodings::UUEncode
+    end
+
   end
 
 end
