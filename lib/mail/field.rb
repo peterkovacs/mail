@@ -183,6 +183,10 @@ module Mail
       field.send(name, *args, &block)
     end
 
+    def respond_to?( method, include_private = false )
+      super || field.respond_to?( method )
+    end
+
     FIELD_ORDER = %w[ return-path received
                       resent-date resent-from resent-sender resent-to
                       resent-cc resent-bcc resent-message-id

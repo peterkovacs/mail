@@ -1,0 +1,25 @@
+To: example@example.com
+From: example@example.com
+Subject: subject
+Date: Thu, 1 Aug 2013 15:51:35 +0200
+Message-ID: <20130801_135135_054110.facturacion@example.com>
+MIME-Version: 1.0
+Content-type: multipart/mixed;
+        boundary="Message-Boundary-by-Mail-Sender-1375365095"
+
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+--Message-Boundary-by-Mail-Sender-1375365095
+Content-type: text/html
+Content-transfer-encoding: 7BIT
+
+Not important
+--Message-Boundary-by-Mail-Sender-1375365095
+Content-type: text/html; name="factura_2013B1561.html"
+Content-description: factura_2013B1561.html
+Content-transfer-encoding: 7BIT
+Content-disposition: "attachment; filename="factura_2013B1561.html"; type="html archive",
+
+Not important
+--Message-Boundary-by-Mail-Sender-1375365095--

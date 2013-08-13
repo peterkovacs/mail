@@ -264,6 +264,12 @@ describe Mail::Message do
       m.should be_multipart
     end
 
+    it "should handle an invalid content-disposition" do
+      m = Mail.read(fixture('emails', 'error_emails', 'content_disposition.eml'))
+      m.should be_multipart
+      doing { m.encoded }.should_not raise_error
+    end
+
   end
 
   describe "accepting a plain text string email" do
