@@ -196,4 +196,13 @@ describe Mail::UnstructuredField do
       @field.encoded.should eq expect
     end
   end
+
+  describe "windows-1258 subject" do
+    it "should return encoded subjected" do
+      @field = Mail::UnstructuredField.new("Subject", "=?windows-1258?B?UkU6IFZvdHJlIHTpbW9pZ25hZ2UgbG9ycyBkZSBsYSBjb252ZW50aW9u?= =?windows-1258?B?IGNvbW1lcmNpYWxlIEdERiBTVUVaIGR1IDMxLzA1LzEy?=")
+      @field.charset = 'utf-8'
+      expect = "Subject: =?windows-1258?B?UkU6IFZvdHJlIHTpbW9pZ25hZ2UgbG9ycyBkZSBsYSBjb252ZW50aW9u?=\r\n commerciale GDF SUEZ du 31/05/12\r\n"
+      @field.encoded.should eq expect
+    end
+  end
 end

@@ -49,6 +49,7 @@ module Mail
     end
 
     def Ruby19.b_value_decode(str)
+      orig = str
       match = str.match(/\=\?(.+)?\?[Bb]\?(.+)?\?\=/m)
       if match
         charset = match[1]
@@ -56,9 +57,8 @@ module Mail
         str.force_encoding(pick_encoding(charset))
       end
       decoded = str.encode("utf-8", :invalid => :replace, :replace => "")
-      decoded.valid_encoding? ? decoded : decoded.encode("utf-16le", :invalid => :replace, :replace => "").encode("utf-8")
-    rescue Encoding::UndefinedConversionError
-      str.dup.force_encoding(Encoding::ASCII_8BIT)
+    rescue Encoding::UndefinedConversionError, Encoding::ConverterNotFoundError
+      orig.dup.force_encoding(Encoding::ASCII_8BIT)
     end
 
     def Ruby19.q_value_encode(str, encoding = nil)
@@ -149,6 +149,11 @@ module Mail
       # GB2312 (Chinese charset) is a subset of GB18030 (its replacement)
       when /gb2312/i
         Encoding::GB18030
+
+      when /euc-kr/i
+        # SB-6408 EUC-KR is often actually Windows-949, aka CP949.
+        # CP949 is a superset of EUC-KR, so this should be reasonably safe.
+        Encoding::CP949
 
       else
         Encoding.find( charset ) rescue raise Encoding::UndefinedConversionError

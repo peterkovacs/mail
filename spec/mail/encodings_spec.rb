@@ -186,6 +186,20 @@ describe Mail::Encodings do
         string = '=?GB2312?B?6V8=?='.force_encoding('us-ascii')
         Mail::Encodings.value_decode(string).should == "開"
       end
+
+      it "should not decode windows-1258 requiring conversion" do
+        string = "=?windows-1258?B?UkU6IFZvdHJlIHTpbW9pZ25hZ2UgbG9ycyBkZSBsYSBjb252ZW50aW9u?= =?windows-1258?B?IGNvbW1lcmNpYWxlIEdERiBTVUVaIGR1IDMxLzA1LzEy?="
+        result = "=?windows-1258?B?UkU6IFZvdHJlIHTpbW9pZ25hZ2UgbG9ycyBkZSBsYSBjb252ZW50aW9u?= commerciale GDF SUEZ du 31/05/12"
+
+        Mail::Encodings.value_decode( string ).should eq result
+      end
+
+      it "should decode EUC-KR as CP949" do
+        string = "=?EUC-KR?B?rN+s1azgrOKs4qzRIKzZrNEgMzM4ouY=?="
+        result = "ндорра за 338€"
+
+        Mail::Encodings.value_decode( string ).should eq result
+      end
     end
   end
 
