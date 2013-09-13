@@ -186,8 +186,8 @@ describe "mail encoding" do
   end
 
   it "should skip invalid characters" do
-    m = Mail.new
-    m['Subject'] = Mail::SubjectField.new("=?utf-8?Q?Hello_=96_World?=")
+    m = Mail.new( "Subject: =?utf-8?Q?Hello_=96_World?=\r\n")
+    #m['Subject'] = Mail::SubjectField.new("=?utf-8?Q?Hello_=96_World?=")
     if RUBY_VERSION > '1.9'
       lambda { m.subject.should be_valid_encoding }.should_not raise_error
     else

@@ -235,7 +235,7 @@ describe Mail::Field do
       pending if defined?(JRUBY_VERSION) && JRUBY_VERSION >= '1.7.0'
 
       subject = Mail::SubjectField.new("=?iso2022jp?B?SEVBUlQbJEIkSiQ0TyJNbRsoQg?=", 'utf-8')
-      subject.decoded.should eq  "HEARTなご連絡"
+      subject.decoded.should eq  "HEARTなご連絡�"
     end
 
     it "more tolerable to encoding definitions, UTF (issue 120)" do

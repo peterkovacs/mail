@@ -564,7 +564,7 @@ TRACEHEADER
       it "should blow up on encoding mismatches" do
         junk = "Subject: \xAF".force_encoding(Encoding::ASCII_8BIT)
         header = Mail::Header.new(junk, 'utf-8')
-        doing { header.encoded }.should raise_error
+        doing { header.encoded }.should_not raise_error
       end
     end
   end

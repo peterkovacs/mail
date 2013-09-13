@@ -168,12 +168,12 @@ describe Mail::Encodings do
     if '1.9'.respond_to?(:force_encoding)
       it "should decode 8bit encoded string" do
         string = "=?8bit?Q?ALPH=C3=89E?="
-        result = "ALPH\xC3\x89E".force_encoding( 'ASCII-8BIT')
+        result = "ALPH��E"
         Mail::Encodings.value_decode(string).should == result
       end
 
       it "should decode ks_c_5601-1987 encoded string" do
-        string = '=?ks_c_5601-1987?B?seggx/bB+A==?= <a@b.org>'.force_encoding('us-ascii')
+        string = '=?ks_c_5601-1987?B?seggx/bB+A==?= <a@b.org>'
         Mail::Encodings.value_decode(string).should == "김 현진 <a@b.org>"
       end
 
@@ -187,9 +187,9 @@ describe Mail::Encodings do
         Mail::Encodings.value_decode(string).should == "開"
       end
 
-      it "should not decode windows-1258 requiring conversion" do
+      it "should decode windows-1258 requiring conversion" do
         string = "=?windows-1258?B?UkU6IFZvdHJlIHTpbW9pZ25hZ2UgbG9ycyBkZSBsYSBjb252ZW50aW9u?= =?windows-1258?B?IGNvbW1lcmNpYWxlIEdERiBTVUVaIGR1IDMxLzA1LzEy?="
-        result = "=?windows-1258?B?UkU6IFZvdHJlIHTpbW9pZ25hZ2UgbG9ycyBkZSBsYSBjb252ZW50aW9u?= commerciale GDF SUEZ du 31/05/12"
+        result = "RE: Votre t�moignage lors de la convention commerciale GDF SUEZ du 31/05/12"
 
         Mail::Encodings.value_decode( string ).should eq result
       end
@@ -605,6 +605,14 @@ describe Mail::Encodings do
     end
 
     describe "unquote and convert to" do
+
+      it "should unquote and convert to from invalid encoding" do
+        a = "invalid \xA9".force_encoding( Encoding::ASCII_8BIT )
+        b = Mail::Encodings.unquote_and_convert_to( a, 'utf-8' )
+        b.encoding.should eq Encoding::UTF_8
+        b.should eq "invalid �"
+      end
+
       it "should unquote quoted printable and convert to utf-8" do
         a ="=?ISO-8859-1?Q?[166417]_Bekr=E6ftelse_fra_Rejsefeber?="
         b = Mail::Encodings.unquote_and_convert_to(a, 'utf-8')

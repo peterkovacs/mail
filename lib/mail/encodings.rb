@@ -114,7 +114,8 @@ module Mail
     # String has to be of the format =?<encoding>?[QB]?<string>?=
     def Encodings.value_decode(str)
       # Optimization: If there's no encoded-words in the string, just return it
-      return str unless str =~ /\=\?[^?]+\?[QB]\?[^?]+?\?\=/xmi
+      # Ensure it returns utf-8
+      return RubyVer.encode_utf8( str ) unless str =~ /\=\?[^?]+\?[QB]\?[^?]+?\?\=/xmi 
 
       lines = collapse_adjacent_encodings(str)
 
@@ -135,7 +136,7 @@ module Mail
             elsif method == 'q' || method == 'Q'
               q_value_decode(string)
             else
-              string
+              RubyVer.encode_utf8( string )
             end
           end
         end
@@ -146,7 +147,7 @@ module Mail
     def Encodings.unquote_and_convert_to(str, to_encoding)
       output = value_decode( str ).to_s # output is already converted to UTF-8
 
-      if 'utf8' == to_encoding.to_s.downcase.gsub("-", "")
+      if 'utf-8' == to_encoding || 'utf8' == to_encoding.to_s.downcase.gsub("-", "")
         output
       elsif to_encoding
         begin
