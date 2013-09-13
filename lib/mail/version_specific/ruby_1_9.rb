@@ -114,23 +114,23 @@ module Mail
 
       # ISO-8859-8-I etc. http://en.wikipedia.org/wiki/ISO-8859-8-I
       when /^iso-?8859-(\d+)(-i)?$/i
-        "ISO-8859-#{$1}"
+        Encoding.find( "ISO-8859-#{$1}" ) rescue Encoding::ASCII_8BIT
 
       # ISO-8859-15, ISO-2022-JP and alike
       when /iso-?(\d{4})-?(\w{1,2})/i
-        "ISO-#{$1}-#{$2}"
+        Encoding.find( "ISO-#{$1}-#{$2}" ) rescue Encoding::ASCII_8BIT
 
       # "ISO-2022-JP-KDDI"  and alike
       when /iso-?(\d{4})-?(\w{1,2})-?(\w*)/i
-        "ISO-#{$1}-#{$2}-#{$3}"
+        Enconding.find( "ISO-#{$1}-#{$2}-#{$3}" ) rescue Encoding::ASCII_8BIT
 
       # UTF-8, UTF-32BE and alike
       when /utf[\-_]?(\d{1,2})?(\w{1,2})/i
-        "UTF-#{$1}#{$2}".gsub(/\A(UTF-(?:16|32))\z/, '\\1BE')
+        Encoding.find( "UTF-#{$1}#{$2}".gsub(/\A(UTF-(?:16|32))\z/, '\\1BE') ) rescue Encoding::ASCII_8BIT
 
       # Windows-1252 and alike
-      when /Windows-?(.*)/i
-        "Windows-#{$1}"
+      when /Windows-?(\d{3,4}|\d{2}\w)/i
+        Encoding.find( "Windows-#{$1}" ) rescue Encoding::ASCII_8BIT
 
       when /^8bit$/
         Encoding::ASCII_8BIT

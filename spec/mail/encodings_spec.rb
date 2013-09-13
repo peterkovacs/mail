@@ -528,6 +528,13 @@ describe Mail::Encodings do
       result = "ISO-2022-JP いそにーまるににーじぇいぴー"
       Mail::Encodings.value_decode(string).should eq result
     end
+
+    it "should handle invalid charsets" do
+      string = "=?windows-1252http-equivContent-Type=?B?SGVsbG8gliBXb3JsZA==?="
+      result = "Hello – World"
+
+      Mail::Encodings.value_decode(string).should eq result
+    end
   end
 
   describe "altering an encoded text to decoded and visa versa" do
