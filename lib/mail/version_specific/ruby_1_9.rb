@@ -122,7 +122,7 @@ module Mail
 
       # "ISO-2022-JP-KDDI"  and alike
       when /iso-?(\d{4})-?(\w{1,2})-?(\w*)/i
-        Enconding.find( "ISO-#{$1}-#{$2}-#{$3}" ) rescue Encoding::ASCII_8BIT
+        Encoding.find( "ISO-#{$1}-#{$2}-#{$3}" ) rescue Encoding::ASCII_8BIT
 
       # UTF-8, UTF-32BE and alike
       when /utf[\-_]?(\d{1,2})?(\w{1,2})/i

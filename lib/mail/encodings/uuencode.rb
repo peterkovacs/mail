@@ -31,6 +31,7 @@ module Mail
       end
 
       Encodings.register(NAME, self)      
+      Encodings.register("x-#{NAME}", self)
     end
   end
 end
