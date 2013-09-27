@@ -49,6 +49,10 @@ describe Mail::Encodings do
     end
 
     it "should return the QuotedPrintable Encoding class" do
+      Mail::Encodings.get_encoding('quotedprintable').should eq Mail::Encodings::QuotedPrintable
+    end
+
+    it "should return the QuotedPrintable Encoding class" do
       Mail::Encodings.get_encoding('Quoted-Printable').should eq Mail::Encodings::QuotedPrintable
     end
 

@@ -34,6 +34,7 @@ module Mail
       private
 
       Encodings.register(NAME, self)
+      Encodings.register('quotedprintable', self)
     end
   end
 end
