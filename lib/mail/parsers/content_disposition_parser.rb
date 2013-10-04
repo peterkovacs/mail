@@ -3,7 +3,7 @@ module Mail::Parsers
     include Mail::Utilities
 
     def parse(s)
-      content_disposition = ContentDispositionStruct.new("", nil)
+      content_disposition = ContentDispositionStruct.new("", [])
       if s.blank?
         return content_disposition
       end
@@ -14,8 +14,6 @@ module Mail::Parsers
       end
 
       s = Mail::Utilities::ParseBuffer.new( s )
-
-      content_disposition.parameters = []
 
       disp_type_s = param_attr_s = param_attr = qstr_s = qstr = param_val_s = nil
       actions.each_slice(2) do |action_id, p|

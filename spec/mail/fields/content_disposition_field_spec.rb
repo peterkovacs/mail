@@ -63,6 +63,11 @@ describe Mail::ContentDispositionField do
       c = Mail::ContentDispositionField.new('Content-Disposition: AttachMent')
       c.decoded.should eq 'attachment'
     end
+
+    it "should handle an empty field" do
+      c = Mail::ContentDispositionField.new( 'Content-Disposition: ')
+      c.decoded.should eq ''
+    end
   end
 
   describe "instance methods" do
