@@ -5,7 +5,10 @@ module Mail
     
     # Returns true if the string supplied is free from characters not allowed as an ATOM
     def atom_safe?( str )
-      not ATOM_UNSAFE === str
+      original_encoding = str.encoding
+      not ATOM_UNSAFE === str.force_encoding( Encoding::ASCII_8BIT )
+    ensure
+      str.force_encoding( original_encoding )
     end
 
     # If the string supplied has ATOM unsafe characters in it, will return the string quoted 
@@ -32,7 +35,10 @@ module Mail
 
     # Returns true if the string supplied is free from characters not allowed as a TOKEN
     def token_safe?( str )
-      not TOKEN_UNSAFE === str
+      original_encoding = str.encoding
+      not TOKEN_UNSAFE === str.force_encoding( Encoding::ASCII_8BIT )
+    ensure
+      str.force_encoding( original_encoding )
     end
 
     # If the string supplied has TOKEN unsafe characters in it, will return the string quoted 
@@ -52,7 +58,7 @@ module Mail
     #  string = 'This is "a string"'
     #  dquote(string #=> '"This is \"a string\"'
     def dquote( str )
-      '"' + unquote(str).gsub(/[\\"]/n) {|s| '\\' + s } + '"'
+      '"' + unquote(str).gsub(/[\\"]/) {|s| '\\' + s } + '"'
     end
 
     # Unwraps supplied string from inside double quotes and

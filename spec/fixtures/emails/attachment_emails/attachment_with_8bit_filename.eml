@@ -1,0 +1,45 @@
+Date: Wed, 30 Oct 2013 12:54:33 +0100 (CET)
+From: First Last <email@domain.com>
+To: <recipient@icloud.com>
+Message-id: <1317518590.3211383134073043.JavaMail.cmsadmp@lnx92928.xyzzy.ch>
+Subject: Subject
+MIME-version: 1.0
+Content-type: multipart/mixed; boundary="----=_Part_882_572539544.1383134073039"
+
+------=_Part_882_572539544.1383134073039
+Content-Type: multipart/related; 
+	boundary="----=_Part_883_1945377448.1383134073039"
+
+------=_Part_883_1945377448.1383134073039
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_884_520242961.1383134073040"
+
+------=_Part_884_520242961.1383134073040
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Sehr geehrter Herr B=C3=BCtzer
+
+Message message message
+------=_Part_884_520242961.1383134073040
+Content-Type: text/html;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head></head><body><p style=3D "margin-bottom: 16px; margin-top: 0; f=
+ont-family: Arial; width: 600px;"></p></body></html>
+------=_Part_884_520242961.1383134073040--
+
+------=_Part_883_1945377448.1383134073039--
+
+------=_Part_882_572539544.1383134073039
+Content-Type: application/pdf; name=Antrag.pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=Antrag.pdf
+
+------=_Part_882_572539544.1383134073039
+Content-Type: application/pdf; name="Angebotsübersicht.pdf"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="Angebotsübersicht.pdf"
+
+------=_Part_882_572539544.1383134073039--
+

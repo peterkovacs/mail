@@ -16,22 +16,22 @@ module Mail
     end
     
     CRLF          = /\r\n/
-    WSP           = /[#{white_space}]/
-    FWS           = /#{CRLF}#{WSP}*/
-    TEXT          = /[#{text}]/ # + obs-text
-    FIELD_NAME    = /[#{field_name}]+/
-    FIELD_PREFIX  = /\A(#{FIELD_NAME})/
-    FIELD_BODY    = /.+/m
-    FIELD_LINE    = /^[#{field_name}]+:\s*.+$/
-    FIELD_SPLIT   = /^(#{FIELD_NAME})\s*:\s*(#{FIELD_BODY})?$/
-    HEADER_LINE   = /^([#{field_name}]+:\s*.+)$/
-    HEADER_SPLIT  = /#{CRLF}(?!#{WSP})/
+    WSP           = /[#{white_space}]/o
+    FWS           = /#{CRLF}#{WSP}*/o
+    TEXT          = /[#{text}]/o # + obs-texto
+    FIELD_NAME    = /[#{field_name}]+/o
+    FIELD_PREFIX  = /\A(#{FIELD_NAME})/o
+    FIELD_BODY    = /.+/mo
+    FIELD_LINE    = /^[#{field_name}]+:\s*.+$/o
+    FIELD_SPLIT   = /^(#{FIELD_NAME})\s*:\s*(#{FIELD_BODY})?$/o
+    HEADER_LINE   = /^([#{field_name}]+:\s*.+)$/o
+    HEADER_SPLIT  = /#{CRLF}(?!#{WSP})/o
 
-    QP_UNSAFE     = /[^#{qp_safe}]/
-    QP_SAFE       = /[#{qp_safe}]/
-    CONTROL_CHAR  = /[#{control}]/n
-    ATOM_UNSAFE   = /[#{Regexp.quote aspecial}#{control}#{sp}]/n
-    PHRASE_UNSAFE = /[#{Regexp.quote aspecial}#{control}]/n
-    TOKEN_UNSAFE  = /[#{Regexp.quote tspecial}#{control}#{sp}]/n
+    QP_UNSAFE     = /[^#{qp_safe}]/o
+    QP_SAFE       = /[#{qp_safe}]/o
+    CONTROL_CHAR  = /[#{control}]/no
+    ATOM_UNSAFE   = /[#{Regexp.quote aspecial}#{control}#{sp}]/no
+    PHRASE_UNSAFE = /[#{Regexp.quote aspecial}#{control}]/no
+    TOKEN_UNSAFE  = /[#{Regexp.quote tspecial}#{control}#{sp}]/no
   end
 end
