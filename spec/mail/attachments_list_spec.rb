@@ -273,7 +273,7 @@ describe "reading emails with attachments" do
     it "should decode and encode attachments with 8bit names" do
       mail = Mail.read( fixture( File.join('emails', 'attachment_emails', 'attachment_with_8bit_filename.eml' ) ) )
       mail.attachments.length.should eq 2
-      expect{ mail.encoded }.to_not raise_error
+      expect { mail.encoded }.to_not raise_error
     end
 
     it "attach filename decoding (issue 83)" do

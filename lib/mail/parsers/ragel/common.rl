@@ -36,8 +36,8 @@
   obs_qtext = obs_NO_WS_CTL;
   atext = ALPHA | DIGIT | "!" | "#" | "$" | "%" | "&" |
           "'" | "*" | "+" | "-" | "/" | "=" | "?" | "^" |
-          "_" | "`" | "{" | "|" | "}" | "~" | UTF8_non_ascii;
-  qtext = 0x21 | 0x23..0x5b | 0x5d..0x7e | obs_qtext | UTF8_non_ascii;
+          "_" | "`" | "{" | "|" | "}" | "~" | UTF8_non_ascii | 0xa1 .. 0xff ;
+  qtext = 0x21 | 0x23..0x5b | 0x5d..0x7e | obs_qtext | UTF8_non_ascii | 0xa1 .. 0xff;
   obs_dtext = obs_NO_WS_CTL | quoted_pair;
   qcontent = qtext | quoted_pair;
 
@@ -164,7 +164,7 @@
             ( ";"? word+ )?;
 
   token = 0x21..0x27 | 0x2a..0x2b | 0x2c..0x2e |
-          0x30..0x39 | 0x41..0x5a | 0x5e..0x7e;
+          0x30..0x39 | 0x41..0x5a | 0x5e..0x7e ;
   value = (quoted_string | (token -- '"' | 0x3d)+) >param_val_s %param_val_e;
   attribute = (token+) >param_attr_s %param_attr_e;
   parameter = CFWS? attribute "=" value CFWS?;
