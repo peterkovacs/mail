@@ -225,4 +225,10 @@ describe "mail encoding" do
     end
   end
 
+  it "should decode unknown-to-ruby charsets" do
+      message = Mail.read(fixture('emails', 'plain_emails', 'raw_email_iso_8859-8-i.eml'))
+
+      lambda { message.decoded.encoding.should eq Encoding::UTF_8 }.should_not raise_error
+  end
+
 end
