@@ -109,28 +109,28 @@ module Mail
     # TODO: add this as a test somewhere:
     #   Encoding.list.map { |e| [e.to_s.upcase == pick_encoding(e.to_s.downcase.gsub("-", "")), e.to_s] }.select {|a,b| !b}
     #   Encoding.list.map { |e| [e.to_s == pick_encoding(e.to_s), e.to_s] }.select {|a,b| !b}
-    def Ruby19.pick_encoding(charset)
+    def Ruby19.pick_encoding(charset, default = Encoding::ASCII_8BIT)
       case charset
 
       # ISO-8859-8-I etc. http://en.wikipedia.org/wiki/ISO-8859-8-I
       when /^iso-?8859-(\d+)(-i)?$/i
-        Encoding.find( "ISO-8859-#{$1}" ) rescue Encoding::ASCII_8BIT
+        Encoding.find( "ISO-8859-#{$1}" ) rescue default
 
       # ISO-8859-15, ISO-2022-JP and alike
       when /iso-?(\d{4})-?(\w{1,2})/i
-        Encoding.find( "ISO-#{$1}-#{$2}" ) rescue Encoding::ASCII_8BIT
+        Encoding.find( "ISO-#{$1}-#{$2}" ) rescue default
 
       # "ISO-2022-JP-KDDI"  and alike
       when /iso-?(\d{4})-?(\w{1,2})-?(\w*)/i
-        Encoding.find( "ISO-#{$1}-#{$2}-#{$3}" ) rescue Encoding::ASCII_8BIT
+        Encoding.find( "ISO-#{$1}-#{$2}-#{$3}" ) rescue default
 
       # UTF-8, UTF-32BE and alike
       when /utf[\-_]?(\d{1,2})?(\w{1,2})/i
-        Encoding.find( "UTF-#{$1}#{$2}".gsub(/\A(UTF-(?:16|32))\z/, '\\1BE') ) rescue Encoding::ASCII_8BIT
+        Encoding.find( "UTF-#{$1}#{$2}".gsub(/\A(UTF-(?:16|32))\z/, '\\1BE') ) rescue default
 
       # Windows-1252 and alike
       when /Windows-?(\d{3,4}|\d{2}\w)/i
-        Encoding.find( "Windows-#{$1}" ) rescue Encoding::ASCII_8BIT
+        Encoding.find( "Windows-#{$1}" ) rescue default
 
       when /^8bit$/
         Encoding::ASCII_8BIT
@@ -167,7 +167,7 @@ module Mail
         Encoding::ASCII_8BIT
 
       else
-        Encoding.find( charset ) rescue Encoding::ASCII_8BIT
+        Encoding.find( charset ) rescue default
       end
     end
   end

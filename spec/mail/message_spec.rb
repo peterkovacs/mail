@@ -74,6 +74,11 @@ describe Mail::Message do
       Mail.read(fixture('emails', 'error_emails', 'must_supply_encoding.eml'))
     end
 
+    it 'should be able to parse illegal content-id encoding' do
+      mail = Mail.read(fixture('emails', 'error_emails', 'utf_fffd_content_id.eml'))
+      lambda { mail.encoded }.should_not raise_error
+    end
+
     it "should be able to parse every email example we have without raising an exception" do
       emails = Dir.glob( fixture('emails/**/*') ).delete_if { |f| File.directory?(f) }
 

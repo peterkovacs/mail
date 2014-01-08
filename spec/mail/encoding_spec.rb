@@ -231,4 +231,10 @@ describe "mail encoding" do
       lambda { message.decoded.encoding.should eq Encoding::UTF_8 }.should_not raise_error
   end
 
+  it "should encode utf replacement char as ascii-8bit" do
+    field = Mail::Field.new( "Content-Id: <360\xBD\xD8\xCD\xBC20131217140814042.jpg@41627.4227978472.75".force_encoding( 'ascii-8bit' ) ).field
+    lambda { field = field.send( :fold ) }.should_not raise_error
+    field.should eq [ "=?UTF-8?Q?<360=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD20131217140814042.jpg@41627.4227978472.75?=" ]
+  end
+
 end

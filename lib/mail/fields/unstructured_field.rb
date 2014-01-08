@@ -118,9 +118,10 @@ module Mail
     end
 
     def fold(prepend = 0) # :nodoc:
-      encoding       = normalized_encoding
       decoded_string = decoded.to_s
       should_encode  = decoded_string.not_ascii_only?
+      encoding = normalized_encoding
+
       if should_encode
         first = true
         words = decoded_string.split(/[ \t]/).map do |word|
@@ -189,9 +190,7 @@ module Mail
     end
 
     def normalized_encoding
-      encoding = charset.to_s.upcase.gsub('_', '-')
-      encoding = 'UTF-8' if encoding == 'UTF8' # Ruby 1.8.x and $KCODE == 'u'
-      encoding
+      RubyVer.pick_encoding( charset ).to_s
     end
 
   end

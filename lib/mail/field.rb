@@ -231,7 +231,7 @@ module Mail
       begin
         new_field(name, value, charset)
       rescue Mail::Field::ParseError => e
-        field = Mail::UnstructuredField.new(name, value)
+        field = Mail::UnstructuredField.new(name, value, charset)
         field.errors << [name, value, e]
         field
       end
