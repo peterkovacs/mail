@@ -57,27 +57,27 @@ describe Mail::MessageIdField do
   describe "initialization" do
 
     it "should initialize" do
-      doing { Mail::MessageIdField.new("<1234@test.lindsaar.net>") }.should_not raise_error
+      expect { Mail::MessageIdField.new("<1234@test.lindsaar.net>") }.not_to raise_error
     end
 
     it "should accept a string with the field name" do
       m = Mail::MessageIdField.new('Message-ID: <1234@test.lindsaar.net>')
-      m.name.should eq 'Message-ID'
-      m.value.should eq '<1234@test.lindsaar.net>'
-      m.message_id.should eq '<1234@test.lindsaar.net>'
+      expect(m.name).to eq 'Message-ID'
+      expect(m.value).to eq '<1234@test.lindsaar.net>'
+      expect(m.message_id).to eq '<1234@test.lindsaar.net>'
     end
 
     it "should accept a string without the field name" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
-      m.name.should eq 'Message-ID'
-      m.value.should eq '<1234@test.lindsaar.net>'
-      m.message_id.should eq '<1234@test.lindsaar.net>'
+      expect(m.name).to eq 'Message-ID'
+      expect(m.value).to eq '<1234@test.lindsaar.net>'
+      expect(m.message_id).to eq '<1234@test.lindsaar.net>'
     end
 
     it "should accept a nil value and generate a message_id" do
       m = Mail::MessageIdField.new(nil)
-      m.name.should eq 'Message-ID'
-      m.value.should_not be_nil
+      expect(m.name).to eq 'Message-ID'
+      expect(m.value).not_to be_nil
     end
 
   end
@@ -86,17 +86,17 @@ describe Mail::MessageIdField do
 
     it "should not accept a string with multiple message IDs but only return the first" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net> <4567@test.lindsaar.net>')
-      m.name.should eq 'Message-ID'
-      m.to_s.should eq '<1234@test.lindsaar.net>'
-      m.message_id.should eq '<1234@test.lindsaar.net>'
-      m.message_ids.should eq ['<1234@test.lindsaar.net>']
+      expect(m.name).to eq 'Message-ID'
+      expect(m.to_s).to eq '<1234@test.lindsaar.net>'
+      expect(m.message_id).to eq '<1234@test.lindsaar.net>'
+      expect(m.message_ids).to eq ['<1234@test.lindsaar.net>']
     end
 
     it "should change the message id if given a new message id" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
-      m.to_s.should eq '<1234@test.lindsaar.net>'
+      expect(m.to_s).to eq '<1234@test.lindsaar.net>'
       m.value = '<4567@test.lindsaar.net>'
-      m.to_s.should eq '<4567@test.lindsaar.net>'
+      expect(m.to_s).to eq '<4567@test.lindsaar.net>'
     end
 
   end
@@ -104,36 +104,36 @@ describe Mail::MessageIdField do
   describe "instance methods" do
     it "should provide to_s" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
-      m.to_s.should eq '<1234@test.lindsaar.net>'
-      m.message_id.to_s.should eq '<1234@test.lindsaar.net>'
+      expect(m.to_s).to eq '<1234@test.lindsaar.net>'
+      expect(m.message_id.to_s).to eq '<1234@test.lindsaar.net>'
     end
 
     it "should provide encoded" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
-      m.encoded.should eq "Message-ID: <1234@test.lindsaar.net>\r\n"
+      expect(m.encoded).to eq "Message-ID: <1234@test.lindsaar.net>\r\n"
     end
 
     it "should provide decoded" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
-      m.decoded.should eq "<1234@test.lindsaar.net>"
+      expect(m.decoded).to eq "<1234@test.lindsaar.net>"
     end
     
     it "should respond to :responsible_for?" do
       m = Mail::MessageIdField.new('<1234@test.lindsaar.net>')
-      m.should respond_to(:responsible_for?)
+      expect(m).to respond_to(:responsible_for?)
     end
   end
 
   describe "generating a message id" do
     it "should generate a message ID if it has no value" do
       m = Mail::MessageIdField.new
-      m.message_id.should_not be_blank
+      expect(m.message_id).not_to be_blank
     end
     
     it "should generate a random message ID" do
       m = Mail::MessageIdField.new
       1.upto(100) do
-        m.message_id.should_not eq Mail::MessageIdField.new.message_id
+        expect(m.message_id).not_to eq(Mail::MessageIdField.new.message_id)
       end
     end
   end
@@ -141,71 +141,71 @@ describe Mail::MessageIdField do
   describe "weird message IDs" do
     it "should be able to parse <000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>" do
       m = Mail::MessageIdField.new('<000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>')
-      m.message_id.should eq '<000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>'
+      expect(m.message_id).to eq '<000701c874a6$3df7eaf0$b9e7c0d0$@geille@fiscon.com>'
     end
 
     it "should be able to parse <.AAA-default-12226,16.1089643496@us-bdb-1201.vdc.amazon.com>" do
       m = Mail::MessageIdField.new('<.AAA-default-12226,16.1089643496@us-bdb-1201.vdc.amazon.com>')
-      m.message_id.should eq '<.AAA-default-12226,16.1089643496@us-bdb-1201.vdc.amazon.com>'
+      expect(m.message_id).to eq '<.AAA-default-12226,16.1089643496@us-bdb-1201.vdc.amazon.com>'
     end
 
     it "should be able to parse <091720041340.19561.414AE9430005E91000004C6922007589429B0702040790040A0E08 0C0703@comcast.net>" do
       m = Mail::MessageIdField.new( '<091720041340.19561.414AE9430005E91000004C6922007589429B0702040790040A0E08 0C0703@comcast.net>')
-      m.message_id.should eq '<091720041340.19561.414AE9430005E91000004C6922007589429B0702040790040A0E08 0C0703@comcast.net>'
+      expect(m.message_id).to eq '<091720041340.19561.414AE9430005E91000004C6922007589429B0702040790040A0E08 0C0703@comcast.net>'
     end
 
     it "should be able to parse <3851.1096568577MSOSI1188307:1OSIMS@gamefly.com>" do
       m = Mail::MessageIdField.new( '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com>')
-      m.message_id.should eq '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com>'
+      expect(m.message_id).to eq '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com>'
     end
 
     it "should be able to parse <3851.1096568577MSOSI1188307:1OSIMS@gamefly.com >" do
       m = Mail::MessageIdField.new( '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com >')
-      m.message_id.should eq '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com >'
+      expect(m.message_id).to eq '<3851.1096568577MSOSI1188307:1OSIMS@gamefly.com >'
     end
 
     it "should be able to parse <000301caf03a$77d922ae$82dba8c0@.pool.ukrtel.net>" do
       m = Mail::MessageIdField.new( '<000301caf03a$77d922ae$82dba8c0@.pool.ukrtel.net>')
-      m.message_id.should eq '<000301caf03a$77d922ae$82dba8c0@.pool.ukrtel.net>'
+      expect(m.message_id).to eq '<000301caf03a$77d922ae$82dba8c0@.pool.ukrtel.net>'
     end
   
     it 'should be able to parse <"urn:correios:msg:2011071303483114f523ef89e040878bca2e451a999448"@1310528911569.rte-svc-na-5006.iad5.amazon.com>' do
       m = Mail::MessageIdField.new( '<"urn:correios:msg:2011071303483114f523ef89e040878bca2e451a999448"@1310528911569.rte-svc-na-5006.iad5.amazon.com>' )
-      m.message_id.should eq '<"urn:correios:msg:2011071303483114f523ef89e040878bca2e451a999448"@1310528911569.rte-svc-na-5006.iad5.amazon.com>'
+      expect(m.message_id).to eq '<"urn:correios:msg:2011071303483114f523ef89e040878bca2e451a999448"@1310528911569.rte-svc-na-5006.iad5.amazon.com>'
     end
 
     it 'should be able to parse <7467BC5DC7CCEB429E2D3F05E49B3067375E6DC038@EXVMBX020-10.exch020.server...' do
       m = Mail::MessageIdField.new( '<7467BC5DC7CCEB429E2D3F05E49B3067375E6DC038@EXVMBX020-10.exch020.server...' )
-      m.message_id.should eq '<7467BC5DC7CCEB429E2D3F05E49B3067375E6DC038@EXVMBX020-10.exch020.server...'
+      expect(m.message_id).to eq '<7467BC5DC7CCEB429E2D3F05E49B3067375E6DC038@EXVMBX020-10.exch020.server...'
     end
 
     it 'should be able to parse |2a26f8f146e27159|' do
       m = Mail::MessageIdField.new( '2a26f8f146e27159' )
-      m.message_id.should eq '2a26f8f146e27159'
+      expect(m.message_id).to eq '2a26f8f146e27159'
     end
 
     it 'should be able to parse |2a26f8f146e27159@domain.com|' do
       m = Mail::MessageIdField.new( '2a26f8f146e27159@domain.com' )
-      m.message_id.should eq '2a26f8f146e27159@domain.com'
+      expect(m.message_id).to eq '2a26f8f146e27159@domain.com'
     end
 
     it 'should be able to parse |2a26f8f146e27159@domain.com@domain.com|' do
       m = Mail::MessageIdField.new( '2a26f8f146e27159@domain.com@domain.com' )
-      m.message_id.should eq '2a26f8f146e27159@domain.com@domain.com'
+      expect(m.message_id).to eq '2a26f8f146e27159@domain.com@domain.com'
     end
 
     it "should be able to parse |<4769770500E92399@n064.sc1.he.tucows.com> (added by postmaster@bouncemessage.net)|" do
       m = Mail::MessageIdField.new( '<4769770500E92399@n064.sc1.he.tucows.com> (added by postmaster@bouncemessage.net)' )
-      m.message_id.should eq '<4769770500E92399@n064.sc1.he.tucows.com>'
+      expect(m.message_id).to eq '<4769770500E92399@n064.sc1.he.tucows.com>'
     end
 
     it "should be able to parse |<20081016131801.29481.qmail@>|" do
       m = Mail::MessageIdField.new( '<20081016131801.29481.qmail@>' )
-      m.message_id.should eq '<20081016131801.29481.qmail@>'
+      expect(m.message_id).to eq '<20081016131801.29481.qmail@>'
     end
 
     it "should not be able to parse |<20081016131801.29481.qmail@|" do
-      lambda { Mail::MessageIdField.new( '<20081016131801.29481.qmail@' ) }.should raise_exception Mail::Field::ParseError
+      expect { Mail::MessageIdField.new( '<20081016131801.29481.qmail@' ) }.to raise_exception Mail::Field::ParseError
     end
   end
 end

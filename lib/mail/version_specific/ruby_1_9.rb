@@ -2,6 +2,36 @@
 
 module Mail
   class Ruby19
+    class StrictCharsetEncoder
+      def encode(string, charset)
+        string.force_encoding(Mail::Ruby19.pick_encoding(charset))
+      end
+    end
+
+    class BestEffortCharsetEncoder
+      def encode(string, charset)
+        string.force_encoding(pick_encoding(charset))
+      end
+
+      private
+
+      def pick_encoding(charset)
+        charset = case charset
+        when /ansi_x3.110-1983/
+          'ISO-8859-1'
+        when /Windows-?1258/i # Windows-1258 is similar to 1252
+          "Windows-1252"
+        else
+          charset
+        end
+        Mail::Ruby19.pick_encoding(charset)
+      end
+    end
+
+    class << self
+      attr_accessor :charset_encoder
+    end
+    self.charset_encoder = StrictCharsetEncoder.new
 
     # Escapes any parenthesis in a string that are unescaped this uses
     # a Ruby 1.9.1 regexp feature of negative look behind
@@ -60,11 +90,11 @@ module Mail
     end
 
     def Ruby19.b_value_decode(str)
-      match = str.match(/\=\?(.+)?\?[Bb]\?(.+)?\?\=/m)
+      match = str.match(/\=\?(.+)?\?[Bb]\?(.*)\?\=/m)
       if match
         charset = match[1]
         str = Ruby19.decode_base64(match[2])
-        str.force_encoding(pick_encoding(charset))
+        str = charset_encoder.encode(str, charset)
       end
       encode_utf8( str )
     end
@@ -75,14 +105,14 @@ module Mail
     end
 
     def Ruby19.q_value_decode(str)
-      match = str.match(/\=\?(.+)?\?[Qq]\?(.+)?\?\=/m)
+      match = str.match(/\=\?(.+)?\?[Qq]\?(.*)\?\=/m)
       if match
         charset = match[1]
         string = match[2].gsub(/_/, '=20')
         # Remove trailing = if it exists in a Q encoding
         string = string.sub(/\=$/, '')
         str = Encodings::QuotedPrintable.decode(string)
-        str.force_encoding(pick_encoding(charset))
+        str = charset_encoder.encode(str, charset)
       end
       encode_utf8( str )
     end
