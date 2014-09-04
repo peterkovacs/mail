@@ -169,6 +169,12 @@ describe Mail::Encodings do
       expect(Mail::Encodings.value_decode(string)).to eq(result)
     end
 
+    it "should collapse adjacent words with multiple encodings on one line seperated by non-spaces" do
+      string = "Re:[=?iso-2022-jp?B?GyRCJTAlayE8JV0lcyEmJTglYyVRJXMzdDwwMnEbKEI=?=\n =?iso-2022-jp?B?GyRCPFIbKEI=?=] =?iso-2022-jp?B?GyRCSlY/LiEnGyhC?=\n  =?iso-2022-jp?B?GyRCIVolMCVrITwlXSVzIVskKkxkJCQ5ZyRvJDsbKEI=?=\n =?iso-2022-jp?B?GyRCJE43byRLJEQkJCRGIUolaiUvJSglOSVIGyhC?=#1056273\n =?iso-2022-jp?B?GyRCIUsbKEI=?="
+      result = "Re:[グルーポン・ジャパン株式会社] 返信：【グルーポン】お問い合わせの件について（リクエスト#1056273\n ）"
+      expect(Mail::Encodings.value_decode(string)).to eq(result)
+    end
+
     it "should decode a blank string" do
       expect(Mail::Encodings.value_decode("=?utf-8?B??=")).to eq ""
     end
@@ -905,6 +911,23 @@ describe Mail::Encodings do
         with_encoder Mail::Ruby19::BestEffortCharsetEncoder.new do
           expect(Mail::Encodings.value_decode("=?windows-1258?Q?SV=3A_Spr=F8sm=E5l_om_tilbod?=")).to eq "SV: Sprøsmål om tilbod"
         end
+      end
+    end
+  end
+
+  describe ".collapse_adjacent_encodings" do
+    {
+      "    " => ["    "],
+      "AB CD EF ?= =? G" => ["AB CD EF ?= =? G"],
+      "=?iso-2022-jp?B?X=?=" => ["=?iso-2022-jp?B?X=?="],
+      "A=?iso-2022-jp?B?X=?=B" => ["A", "=?iso-2022-jp?B?X=?=", "B"],
+      "A=?iso-2022-jp?B?X=?==?iso-2022-jp?B?Y=?=B" => ["A", "=?iso-2022-jp?B?X=?==?iso-2022-jp?B?Y=?=", "B"],
+      "=?iso-2022-jp?B?X=?==?iso-2022-jp?B?Y=?=" => ["=?iso-2022-jp?B?X=?==?iso-2022-jp?B?Y=?="],
+      "A=?iso-2022-jp?B?X=?=B=?iso-2022-jp?B?Y=?=C" => ["A", "=?iso-2022-jp?B?X=?=", "B", "=?iso-2022-jp?B?Y=?=", "C"],
+      "A=?iso-2022-jp?B?X=?==?utf-8?B?Y=?=B" => ["A", "=?iso-2022-jp?B?X=?=", "=?utf-8?B?Y=?=", "B"]
+    }.each do |text, expected|
+      it "splits #{text} into #{expected.inspect}" do
+        expect(Mail::Encodings.collapse_adjacent_encodings(text)).to eq expected
       end
     end
   end

@@ -33,7 +33,8 @@ module Mail
     ATOM_UNSAFE   = /[#{Regexp.quote aspecial}#{control}#{sp}]/no
     PHRASE_UNSAFE = /[#{Regexp.quote aspecial}#{control}]/no
     TOKEN_UNSAFE  = /[#{Regexp.quote tspecial}#{control}#{sp}]/no
-    ENCODED_VALUE = /\=\?[^?]+\?([QB])\?[^?]*?\?\=/mi
+    ENCODED_VALUE = /\=\?([^?]+)\?([QB])\?[^?]*?\?\=/mi
+    FULL_ENCODED_VALUE = /(\=\?[^?]+\?[QB]\?[^?]*?\?\=)/mi
 
     EMPTY          = ''
     SPACE          = ' '
